@@ -1,10 +1,11 @@
 import * as React from 'react';
 import * as io from 'socket.io-client';
 
+var socket: SocketIOClient.Socket;
+
 interface AppState {
   response: string;
   endpoint: string;
-  // socket?: SocketIOClient.Socket;
   inputText: string;
 }
 
@@ -12,13 +13,11 @@ interface DataResponse {
   response: string;
 }
 
-var socket;
-
 class App extends React.Component <{}, AppState> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      response: 'No messages yet',
+      response: '',
       endpoint: 'http://127.0.0.1:4001',
       inputText: ''
     };
@@ -27,33 +26,20 @@ class App extends React.Component <{}, AppState> {
   }
   
   componentDidMount() {
-    // this.setState({ socket: io(this.state.endpoint) });
-    // if( this.state.socket ) {
-    //   this.state.socket.on('chat message', (data: DataResponse) => {
-    //       this.setState({ response : data.response });
-    //       console.log('data.response');
-    //     }
-    //   );
-    // }
-
     socket = io(this.state.endpoint);
     
     socket.on('chat message', (data: DataResponse) => {
-          this.setState({ response : data.response });
-          console.log('data.response');
-        }
-      );
+      this.setState({ response : this.state.response + '     ' + data.response });
+    });
   }
 
-  handleSend() {
-    // if( this.state.socket ) {
-      // socket.emit('chat message', this.state.inputText);
-      this.setState({inputText: ''});      
-    // }
+  handleSend(event: React.MouseEvent <HTMLInputElement>) {
+      socket.emit('chat message', this.state.inputText);
+      this.setState({inputText: ''});
+      event.preventDefault();     
   }
 
   handleInputText(event: React.ChangeEvent <HTMLInputElement>) {
-    console.log(event.target.value);
     this.setState({inputText: event.target.value});    
   }
 
@@ -63,9 +49,10 @@ class App extends React.Component <{}, AppState> {
         <form>          
           <div>
             <textarea
+              cols={30}
+              rows={10}
               value={this.state.response}
-            />
-            
+            />            
           </div>
           <br/>
           <input
