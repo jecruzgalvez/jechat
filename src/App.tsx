@@ -1,19 +1,84 @@
 import * as React from 'react';
-import './App.css';
+import * as io from 'socket.io-client';
 
-const logo = require('./logo.svg');
+interface AppState {
+  response: string;
+  endpoint: string;
+  // socket?: SocketIOClient.Socket;
+  inputText: string;
+}
 
-class App extends React.Component {
+interface DataResponse {
+  response: string;
+}
+
+var socket;
+
+class App extends React.Component <{}, AppState> {
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      response: 'No messages yet',
+      endpoint: 'http://127.0.0.1:4001',
+      inputText: ''
+    };
+    this.handleSend = this.handleSend.bind(this);
+    this.handleInputText = this.handleInputText.bind(this);
+  }
+  
+  componentDidMount() {
+    // this.setState({ socket: io(this.state.endpoint) });
+    // if( this.state.socket ) {
+    //   this.state.socket.on('chat message', (data: DataResponse) => {
+    //       this.setState({ response : data.response });
+    //       console.log('data.response');
+    //     }
+    //   );
+    // }
+
+    socket = io(this.state.endpoint);
+    
+    socket.on('chat message', (data: DataResponse) => {
+          this.setState({ response : data.response });
+          console.log('data.response');
+        }
+      );
+  }
+
+  handleSend() {
+    // if( this.state.socket ) {
+      // socket.emit('chat message', this.state.inputText);
+      this.setState({inputText: ''});      
+    // }
+  }
+
+  handleInputText(event: React.ChangeEvent <HTMLInputElement>) {
+    console.log(event.target.value);
+    this.setState({inputText: event.target.value});    
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
+      <div>
+        <form>          
+          <div>
+            <textarea
+              value={this.state.response}
+            />
+            
+          </div>
+          <br/>
+          <input
+            type="text"
+            value={this.state.inputText}
+            onChange={this.handleInputText}
+          />
+          <button
+            onClick={this.handleSend}
+          >
+            Send
+          </button>
+        </form>
       </div>
     );
   }
