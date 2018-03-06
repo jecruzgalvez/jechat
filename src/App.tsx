@@ -1,74 +1,45 @@
 import * as React from 'react';
-import * as io from 'socket.io-client';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
-var socket: SocketIOClient.Socket;
 
-interface AppState {
-  response: string;
-  endpoint: string;
-  inputText: string;
-}
+import Login from './components/Login';
+import Register from './components/Register';
+import Chat from './components/Chat';
 
-interface DataResponse {
-  response: string;
-}
+const App = () => (
+  <Router>
+    <div>
+      <ul>
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+        <li>
+          <Link to="/register">Register</Link>
+        </li>        
+        <li>
+        <Link to="/chat">Chat</Link>
+        </li>
+      </ul>
 
-class App extends React.Component <{}, AppState> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      response: '',
-      endpoint: 'http://127.0.0.1:4001',
-      inputText: ''
-    };
-    this.handleSend = this.handleSend.bind(this);
-    this.handleInputText = this.handleInputText.bind(this);
-  }
-  
-  componentDidMount() {
-    socket = io(this.state.endpoint);
-    
-    socket.on('chat message', (data: DataResponse) => {
-      this.setState({ response : this.state.response + '     ' + data.response });
-    });
-  }
+      <hr />
 
-  handleSend(event: React.MouseEvent <HTMLInputElement>) {
-      socket.emit('chat message', this.state.inputText);
-      this.setState({inputText: ''});
-      event.preventDefault();     
-  }
+      <Route
+        exact={true}
+        path="/login"
+        component={Login}
+      />
+      <Route
+        path="/register"
+        component={Register}
+      />
+      <Route
+        path="/chat"
+        component={Chat}
+      />      
 
-  handleInputText(event: React.ChangeEvent <HTMLInputElement>) {
-    this.setState({inputText: event.target.value});    
-  }
+    </div>
 
-  render() {
-    return (
-      <div>
-        <form>          
-          <div>
-            <textarea
-              cols={30}
-              rows={10}
-              value={this.state.response}
-            />            
-          </div>
-          <br/>
-          <input
-            type="text"
-            value={this.state.inputText}
-            onChange={this.handleInputText}
-          />
-          <button
-            onClick={this.handleSend}
-          >
-            Send
-          </button>
-        </form>
-      </div>
-    );
-  }
-}
+  </Router>
+);
 
 export default App;

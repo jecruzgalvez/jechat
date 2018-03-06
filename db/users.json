@@ -1,0 +1,12 @@
+[
+  {
+    "email": "hi@azat.co",
+    "admin": true,
+    "password": "1"
+  },
+  {
+    "email": "jcruz@tekmexico.com",
+    "admin": true,
+    "password": "1"
+  }
+]
