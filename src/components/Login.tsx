@@ -1,30 +1,39 @@
 import * as React from 'react';
 import { Redirect } from 'react-router';
 
+import '../../node_modules/bootstrap/dist/css/bootstrap.css';
+import { Alert, Button } from 'react-bootstrap';
+
 interface LoginState {
   inputEmail?: string;
   inputPassword?: string;
   loggedIn: boolean;
+  loginFailed: boolean;
+  clickedRegister: boolean;
 }
 
 class Login extends React.Component <{}, LoginState> {
   constructor(props: {}) {
     super(props);
     
-    this.handleClick = this.handleClick.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputEmail = this.handleInputEmail.bind(this);
     this.handleInputPassword = this.handleInputPassword.bind(this);
-
+    this.handleRegister = this.handleRegister.bind(this);
+    this.handleTryAgain = this.handleTryAgain.bind(this);
+    
     this.state = {
-      inputEmail: '',
+      inputEmail: 'jcruz@tekmexico.com',
       inputPassword: '',
-      loggedIn: false
+      loggedIn: false,
+      loginFailed: false,
+      clickedRegister: false
     }
   }
 
   handleInputEmail(event: React.ChangeEvent <HTMLInputElement>) {
     // console.log('Typed: ', event.target.value);
-    this.setState( {inputEmail: event.target.value});
+    this.setState( {inputEmail: event.target.value}); //.replace(/^[a-z]$/ig, '')
   }
 
   handleInputPassword(event: React.ChangeEvent <HTMLInputElement>) {
@@ -32,9 +41,9 @@ class Login extends React.Component <{}, LoginState> {
     this.setState( {inputPassword: event.target.value});
   }
 
-  handleClick(event : React.MouseEvent <HTMLInputElement> ) {
-    var url = '/login';
-    var data = {
+  handleSubmit(event : React.MouseEvent <HTMLInputElement> ) {
+    let url = '/login';
+    let data = {
       email: this.state.inputEmail,
       password: this.state.inputPassword
     };
@@ -50,45 +59,98 @@ class Login extends React.Component <{}, LoginState> {
     .catch(error => console.error('Error:', error))
     .then(res => {      
       if(res.response === "success"){
-        console.log("WELCOME");
+        // console.log("WELCOME " + data.email);
         this.setState({loggedIn: true});
       }
       else
-        console.log("USER NOT ALLOWED...");
-        this.setState({loggedIn: false});
+        this.setState({
+          inputEmail: 'jcruz@tekmexico.com',
+          inputPassword: '',
+          loggedIn: false,
+          loginFailed: true
+        });
     });
-
+    
     event.preventDefault();
   }
 
+  handleRegister() {
+    this.setState({clickedRegister: true});
+  }
+
+  handleTryAgain() {
+    this.setState({
+      inputEmail: 'jcruz@tekmexico.com',
+      inputPassword: '',
+      loggedIn: false,
+      loginFailed: false,
+      clickedRegister: false
+    });
+  }
+
   render() {
-    return (
-      this.state.loggedIn ? (
+    if (this.state.loggedIn) {
+      return(
         <Redirect to="/chat" />
-      ) : (
-      <form>
-            Email
-            <input
-              type="text"
-              onChange= {this.handleInputEmail}
-              placeholder="jcruz@tekmexico.com"
-              value= {this.state.inputEmail}              
-            />
-            <br />
-            Password
-            <input
-              type="password"
-              onChange= {this.handleInputPassword}
-              value= {this.state.inputPassword}
-              placeholder="******"
-            />
-            <br />
-            <input
-              type="submit"
-              onClick={this.handleClick}
-            />
-      </form>
       )
+    }
+
+    if(this.state.clickedRegister) {
+      return(
+        <Redirect to="/register" />
+      )
+    }
+
+    if(this.state.loginFailed) {
+      return (
+        <Alert bsStyle="warning">
+          <h4>This user does not exist!</h4>
+          <Button 
+            bsStyle="primary"
+
+            onClick={this.handleTryAgain}
+          >
+            Try again
+          </Button>
+
+          <span> or </span>
+
+          <Button
+            bsStyle="primary"
+            onClick={this.handleRegister}
+          >
+            Register
+          </Button>
+        </Alert>
+      )
+    }
+
+    return (
+      <div>
+        <form>        
+              Email
+              <input
+                type="email"
+                onChange= {this.handleInputEmail}
+                placeholder="jcruz@tekmexico.com"
+                value= {this.state.inputEmail}              
+              />
+              <br />
+              Password
+              <input
+                type="password"
+                onChange= {this.handleInputPassword}
+                value= {this.state.inputPassword}
+                placeholder="******"
+              />
+              <br />
+              <input
+                type="submit"
+                onClick={this.handleSubmit}
+                value="Login"
+              />
+        </form>       
+      </div>
     );
   }
 }

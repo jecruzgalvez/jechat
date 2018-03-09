@@ -1,12 +1,12 @@
 [
   {
+    "userName": "a",
     "email": "a",
-    "admin": true,
     "password": "a"
   },
   {
+    "userName": "Jorge Cruz",
     "email": "jcruz@tekmexico.com",
-    "admin": true,
     "password": "a"
   }
 ]

@@ -1,28 +1,27 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
+import { ButtonGroup, Button } from 'react-bootstrap';
+
 import Login from './components/Login';
 import Register from './components/Register';
 import Chat from './components/Chat';
 
 const App = () => (
-  <Router>
-    
+  <Router>    
     <div>
-
-      <ul>
-        <li>
+      <ButtonGroup>
+        <Button bsStyle="link">
           <Link to="/login">Login</Link>
-        </li>
-        <li>
+        </Button>
+        <Button bsStyle="link">
           <Link to="/register">Register</Link>
-        </li>
-        <li>
-        <Link to="/chat">Chat</Link>
-        </li>
-      </ul>
-
-      <hr />
+        </Button>
+        <Button bsStyle="link">
+          <Link to="/chat">Chat</Link>
+        </Button>
+      </ButtonGroup>     
 
       <Route
         exact={true}
@@ -37,9 +36,7 @@ const App = () => (
         path="/chat"
         component={Chat}
       />
-
     </div>
-
   </Router>
 );
 

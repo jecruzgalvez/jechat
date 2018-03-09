@@ -104,6 +104,29 @@ db.once('open', function() {
       });
   });
 
+  app.post('/register', (req, res) => {
+    User.find({
+      "email" : req.body.email
+      },
+      ( err, existingEmail ) => {
+        // console.log(err, existingEmail);
+        if( err ) {
+          res.status(500).send();
+        }
+        if ( existingEmail.toString() === '' ){
+          User.insertMany(req.body);
+          console.log('User registration successfull');
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify({ response: 'success', existingEmail: false }, null, 3));
+        }
+        else {
+          console.log('The user already exist, impossible to register');
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify({ response: 'fail', existingEmail: true }, null, 3));
+        }
+      });
+  });
+
   app.all('*', function (req, res) {
     res.status(404).send();
   });
@@ -130,6 +153,7 @@ db.once('open', function() {
       console.info(`Express server listening on port ${app.get('port')}`);
     });
   };
+  
   const shutdown = function () {
     server.close(process.exit);
   };
