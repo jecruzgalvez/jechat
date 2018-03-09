@@ -1,43 +1,95 @@
 import * as React from 'react';
+import { Redirect } from 'react-router';
 
-// import 'bootstrap/dist/css/bootstrap.css';
-import { Button, Form, FormGroup, Col, FormControl, ControlLabel, Checkbox } from 'react-bootstrap';
+interface LoginState {
+  inputEmail?: string;
+  inputPassword?: string;
+  loggedIn: boolean;
+}
 
-class Login extends React.Component {
+class Login extends React.Component <{}, LoginState> {
+  constructor(props: {}) {
+    super(props);
+    
+    this.handleClick = this.handleClick.bind(this);
+    this.handleInputEmail = this.handleInputEmail.bind(this);
+    this.handleInputPassword = this.handleInputPassword.bind(this);
+
+    this.state = {
+      inputEmail: '',
+      inputPassword: '',
+      loggedIn: false
+    }
+  }
+
+  handleInputEmail(event: React.ChangeEvent <HTMLInputElement>) {
+    // console.log('Typed: ', event.target.value);
+    this.setState( {inputEmail: event.target.value});
+  }
+
+  handleInputPassword(event: React.ChangeEvent <HTMLInputElement>) {
+    // console.log('Typed: ', event.target.value);
+    this.setState( {inputPassword: event.target.value});
+  }
+
+  handleClick(event : React.MouseEvent <HTMLInputElement> ) {
+    var url = '/login';
+    var data = {
+      email: this.state.inputEmail,
+      password: this.state.inputPassword
+    };
+
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
+    .then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(res => {      
+      if(res.response === "success"){
+        console.log("WELCOME");
+        this.setState({loggedIn: true});
+      }
+      else
+        console.log("USER NOT ALLOWED...");
+        this.setState({loggedIn: false});
+    });
+
+    event.preventDefault();
+  }
+
   render() {
     return (
-      <Form horizontal>
-        <FormGroup controlId="formHorizontalEmail">
-          <Col componentClass={ControlLabel} sm={2}>
+      this.state.loggedIn ? (
+        <Redirect to="/chat" />
+      ) : (
+      <form>
             Email
-          </Col>
-          <Col sm={10}>
-            <FormControl type="email" placeholder="Email" />
-          </Col>
-        </FormGroup>
-      
-        <FormGroup controlId="formHorizontalPassword">
-          <Col componentClass={ControlLabel} sm={2}>
+            <input
+              type="text"
+              onChange= {this.handleInputEmail}
+              placeholder="jcruz@tekmexico.com"
+              value= {this.state.inputEmail}              
+            />
+            <br />
             Password
-          </Col>
-          <Col sm={10}>
-            <FormControl type="password" placeholder="Password" />
-          </Col>
-        </FormGroup>
-      
-        <FormGroup>
-          <Col smOffset={2} sm={10}>
-            <Checkbox>Remember me</Checkbox>
-          </Col>
-        </FormGroup>
-      
-        <FormGroup>
-          <Col smOffset={2} sm={10}>
-            <Button type="submit">Sign in</Button>
-          </Col>
-        </FormGroup>
-      </Form>
-      );
+            <input
+              type="password"
+              onChange= {this.handleInputPassword}
+              value= {this.state.inputPassword}
+              placeholder="******"
+            />
+            <br />
+            <input
+              type="submit"
+              onClick={this.handleClick}
+            />
+      </form>
+      )
+    );
   }
 }
 

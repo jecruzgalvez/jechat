@@ -1,130 +1,145 @@
-// require('babel-register')({
-//   presets: [ 'react' ]
-// })
+import * as express from 'express';
+import * as http from 'http';
+import * as path from 'path';
+import * as mongoose from 'mongoose';
+import * as socketio from 'socket.io';
+import * as cookieParser from 'cookie-parser';
+import * as session from 'express-session';
+import * as logger from 'morgan';
+import * as errorHandler from 'errorhandler';
+import * as compression from 'compression';
+import * as bodyParser from 'body-parser';
+import * as validator from 'express-validator';
+import * as methodOverride from 'method-override';
 
-import * as express from 'express'
-// import * as routes from './routes'
-import * as http from 'http'
-import * as path from 'path'
+// FOR UNIVERSAL JAVASCRIPT
+// import * as React from 'react';
+// import * as ReactDOMServer from 'react-dom/server';
+// import HeaderComponent from './src/components/Header';
+// import LoginComponent from './src/components/Login';
+// import FooterComponent from './src/components/Footer';
+// const Header = React.createFactory(HeaderComponent);
+// const Login = React.createFactory(LoginComponent);
+// const Footer = React.createFactory(FooterComponent);
 
-// import * as  mongoskin from 'mongoskin'
-// const dbUrl = process.env.MONGOHQ_URL || 'mongodb://@localhost:27017/blog'
-// const db = mongoskin.db(dbUrl)
-// const collections = {
-//   articles: db.collection('articles'),
-//   users: db.collection('users')
-// }
+// Importing the user database scheema
+import { User } from './src/models/user';
+mongoose.connect('mongodb://localhost/JEChat');
+let db = mongoose.connection;
 
-// import * as cookieParser from 'cookie-parser'
-// import * as session from 'express-session'
-import * as logger from 'morgan'
-import * as errorHandler from 'errorhandler'
-import * as compression from 'compression'
-import * as bodyParser from 'body-parser'
-import * as validator from 'express-validator'
-import * as methodOverride from 'method-override'
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
 
-import * as React from 'react'
-import * as ReactDOMServer from 'react-dom/server'
+  const app = express();
+  app.locals.appTitle = 'JEChat';
 
-import LoginComponent from './src/components/Login'
+  // Express.js configurations
+  app.set('port', process.env.PORT || 3001);
+  app.set('views', path.join(__dirname, 'views'));
+  app.set('view engine', 'hbs');
 
-const About = React.createFactory(LoginComponent)
+  // Express.js middleware configuration
+  app.use(compression());
+  app.use(logger('dev'));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(validator());
+  app.use(methodOverride());
+  app.use(require('stylus').middleware(path.join(__dirname, 'public')));
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.use(cookieParser('3CCC4ACD-6ED1-4844-9217-82131BDCB239'));
+  app.use(session({secret: '2C44774A-D649-4D44-9535-46E296EF984F',
+    resave: true,
+    saveUninitialized: true}));
 
-const app = express()
-app.locals.appTitle = 'JEChat'
+  // Authentication middleware
+  // app.use((req, res, next) => {
+  //   if (req.session && req.session.admin) { 
+  //     res.locals.admin = true;
+  //   }
+  //   next();
+  // })
 
-// Expose collections to request handlers
-// app.use((req, res, next) => {
-//   if (!collections.articles || !collections.users) return next(new Error('No collections.'))
-//   req.collections = collections
-//   return next()
-// })
+  // Authorization Middleware
+  // const authorize = function (req:any, res:any, next:any) {
+  //   if (req.session && req.session.admin)
+  //     return next();
+  //   else
+  //     return res.status(401).send();
+  // }
 
-// Express.js configurations
-app.set('port', process.env.PORT || 3001)
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'hbs')
-
-
-// Express.js middleware configuration
-app.use(compression())
-app.use(logger('dev'))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(validator())
-app.use(methodOverride())
-app.use(require('stylus').middleware(path.join(__dirname, 'public')))
-app.use(express.static(path.join(__dirname, 'public')))
-
-// app.use(cookieParser('3CCC4ACD-6ED1-4844-9217-82131BDCB239'))
-// app.use(session({secret: '2C44774A-D649-4D44-9535-46E296EF984F',
-  // resave: true,
-  // saveUninitialized: true}))
-
-// Authentication middleware
-app.use((req, res, next) => {
-  if (req.session && req.session.admin) { 
-    res.locals.admin = true 
+  if (app.get('env') === 'development') {
+    app.use(errorHandler());
   }
-  next()
-})
 
-// Authorization Middleware
-// const authorize = function (req, res, next) {
-//   if (req.session && req.session.admin)
-//     return next()
-//   else
-//     return res.status(401).send()
-// }
+  // PAGES&ROUTES
+  
+  // FOR UNIVERSAL JAVASCRIPT
+  // app.get('/login', (req, res, next) => { 
+  //     res.render('index', {
+  //       header: ReactDOMServer.renderToString(Header()),
+  //       login:  ReactDOMServer.renderToString(Login()),
+  //       footer: ReactDOMServer.renderToString(Footer())        
+  //     });
+  // })
+  
+  app.post('/login', (req, res) => {
+    User.find({
+      "email" : req.body.email,
+	    "password" : req.body.password
+      },
+      ( err, existingUser ) => {
+        console.log(err, existingUser);
+        if( err ) {
+          res.status(500).send();
+        }
+        if ( existingUser.toString() === '' ){
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify({ response: 'fail' }, null, 3));
+        }
+        else {
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify({ response: 'success', user: existingUser }, null, 3));
+        }
+      });
+  });
 
-if (app.get('env') === 'development') {
-  app.use(errorHandler())
-}
+  app.all('*', function (req, res) {
+    res.status(404).send();
+  });
 
-// PAGES&ROUTES
-app.get('/about', (request, response, next) => {
-  const aboutHTMl = ReactDOMServer.renderToString(About())
-  response.render('about', {about: aboutHTMl})
-})
-// app.get('/', routes.index)
-// app.get('/login', routes.user.login)
-// app.post('/login', routes.user.authenticate)
-// app.get('/logout', routes.user.logout)
-// app.get('/admin', authorize, routes.article.admin)
-// app.get('/post', authorize, routes.article.post)
-// app.post('/post', authorize, routes.article.postArticle)
-// app.get('/articles/:slug', routes.article.show)
+  const server = http.createServer(app);
+  const io = socketio(server);
 
-// REST API ROUTES
-// app.all('/api', authorize)
-// app.get('/api/articles', routes.article.list)
-// app.post('/api/articles', routes.article.add)
-// app.put('/api/articles/:id', routes.article.edit)
-// app.delete('/api/articles/:id', routes.article.del)
+  io.on('connection', function(socket) {
+    console.log('a user connected');
+    
+    socket.on('disconnect', function(){
+      console.log('user disconnected');
+    });
+  
+    socket.on('chat message', function(msg) {
+      console.log(msg);
+      io.emit('chat message', {response: msg});
+    });
+    
+  });
 
-app.all('*', function (req, res) {
-  res.status(404).send()
-})
-
-// http.createServer(app).listen(app.get('port'), function(){
-  // console.log('Express server listening on port ' + app.get('port'));
-// });
-
-const server = http.createServer(app)
-const boot = function () {
-  server.listen(app.get('port'), function () {
-    console.info(`Express server listening on port ${app.get('port')}`)
-  })
-}
-const shutdown = function () {
-  server.close(process.exit)
-}
-if (require.main === module) {
-  boot()
-} else {
-  console.info('Running app as a module')
-  exports.boot = boot
-  exports.shutdown = shutdown
-  exports.port = app.get('port')
-}
+  const boot = function () {
+    server.listen(app.get('port'), function () {
+      console.info(`Express server listening on port ${app.get('port')}`);
+    });
+  };
+  const shutdown = function () {
+    server.close(process.exit);
+  };
+  if (require.main === module) {
+    boot();
+  } else {
+    console.info('Running app as a module');
+    exports.boot = boot;
+    exports.shutdown = shutdown;
+    exports.port = app.get('port');
+  }
+  
+});

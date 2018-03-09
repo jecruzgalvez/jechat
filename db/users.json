@@ -1,12 +1,12 @@
 [
   {
-    "email": "hi@azat.co",
+    "email": "a",
     "admin": true,
-    "password": "1"
+    "password": "a"
   },
   {
     "email": "jcruz@tekmexico.com",
     "admin": true,
-    "password": "1"
+    "password": "a"
   }
 ]

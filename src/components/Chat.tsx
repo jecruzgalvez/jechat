@@ -1,27 +1,4 @@
 import * as React from 'react';
-
-// import * as ReactDOM from 'react-dom';
-// import { createStore } from 'redux';
-// import Counter from './components/counter';
-// import counter from './reducers/reducers';
-
-// const store = createStore <number> (counter);
-
-// export default class App extends React.Component {
-//   render() {
-//     return(
-//       <Counter
-//         value={store.getState()}
-//         onIncrement={() => store.dispatch({type: 'INCREMENT'})}
-//         onDecrement={() => store.dispatch({type: 'DECREMENT'})}
-//       />
-//     );
-//   }
-// }
-
-// render();
-// store.subscribe(App.render);
-
 import * as io from 'socket.io-client';
 
 var socket: SocketIOClient.Socket;
@@ -42,7 +19,7 @@ class Chat extends React.Component <{}, ChatState> {
     super(props);
     this.state = {
       response: '',
-      endpoint: 'http://127.0.0.1:4001',
+      endpoint: 'http://127.0.0.1:3001',
       inputText: ''
     };
     this.handleSend = this.handleSend.bind(this);
