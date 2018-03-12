@@ -1,7 +1,6 @@
 "use strict";
 exports.__esModule = true;
 var mongoose = require("mongoose");
-
 // User schema
 var userSchema = new mongoose.Schema({
     userName: {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Redirect } from 'react-router';
 
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
-import { Alert, Button } from 'react-bootstrap';
+import { Alert, Button, Jumbotron, Grid, Col, Row } from 'react-bootstrap';
 
 interface LoginState {
   inputEmail?: string;
@@ -59,7 +59,6 @@ class Login extends React.Component <{}, LoginState> {
     .catch(error => console.error('Error:', error))
     .then(res => {      
       if(res.response === "success"){
-        // console.log("WELCOME " + data.email);
         this.setState({loggedIn: true});
       }
       else
@@ -91,13 +90,13 @@ class Login extends React.Component <{}, LoginState> {
   render() {
     if (this.state.loggedIn) {
       return(
-        <Redirect to="/chat" />
+        <Redirect to="/dashboard" />
       )
     }
 
     if(this.state.clickedRegister) {
       return(
-        <Redirect to="/register" />
+        <Redirect to="/registration" />
       )
     }
 
@@ -126,31 +125,52 @@ class Login extends React.Component <{}, LoginState> {
     }
 
     return (
-      <div>
-        <form>        
-              Email
-              <input
-                type="email"
-                onChange= {this.handleInputEmail}
-                placeholder="jcruz@tekmexico.com"
-                value= {this.state.inputEmail}              
-              />
-              <br />
-              Password
-              <input
-                type="password"
-                onChange= {this.handleInputPassword}
-                value= {this.state.inputPassword}
-                placeholder="******"
-              />
-              <br />
+      <Jumbotron>
+        <form>                
+          <Grid>
+            <Row className="show-grid">
+              <Col xs={6} md={2} className="border text-left">
+                Email
+              </Col>
+              <Col xs={6} md={10} className="border  text-left">
+                <input
+                  type="email"
+                  onChange= {this.handleInputEmail}
+                  placeholder="jcruz@tekmexico.com"
+                  value= {this.state.inputEmail}              
+                />
+              </Col>
+            </Row>
+
+            <Row className="show-grid">
+              <Col xs={6} md={2} className="border text-left">
+                Password
+              </Col>
+              <Col xs={6} md={10} className="border text-left">
+                <input
+                  type="password"
+                  onChange= {this.handleInputPassword}
+                  value= {this.state.inputPassword}
+                  placeholder="******"
+                />    
+              </Col>
+            </Row>
+
+            <Row className="show-grid">
+              <Col xs={6} md={2} className="border">
+                </Col>
+              <Col xs={6} md={10} className="border text-left">
               <input
                 type="submit"
                 onClick={this.handleSubmit}
                 value="Login"
               />
+              </Col>
+            </Row>
+
+          </Grid>
         </form>       
-      </div>
+      </Jumbotron>
     );
   }
 }

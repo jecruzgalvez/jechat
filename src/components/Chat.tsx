@@ -1,6 +1,9 @@
 import * as React from 'react';
 import * as io from 'socket.io-client';
 
+import '../../node_modules/bootstrap/dist/css/bootstrap.css';
+import { Jumbotron } from 'react-bootstrap';
+
 var socket: SocketIOClient.Socket;
 
 interface ChatState {
@@ -46,7 +49,8 @@ class Chat extends React.Component <{}, ChatState> {
 
   render() {
     return (
-      <div>
+      <Jumbotron>
+        Participants: Contact 1, Contact2
         <form>          
           <div>
             <textarea
@@ -67,7 +71,7 @@ class Chat extends React.Component <{}, ChatState> {
             Send
           </button>
         </form>
-      </div>
+      </Jumbotron>
     );
   }
 }

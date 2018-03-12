@@ -104,17 +104,18 @@ db.once('open', function() {
       });
   });
 
-  app.post('/register', (req, res) => {
+  app.post('/registration', (req, res) => {
     User.find({
       "email" : req.body.email
       },
       ( err, existingEmail ) => {
-        // console.log(err, existingEmail);
+        console.log(err, existingEmail);
         if( err ) {
           res.status(500).send();
         }
         if ( existingEmail.toString() === '' ){
           User.insertMany(req.body);
+          console.log(req.body);
           console.log('User registration successfull');
           res.setHeader('Content-Type', 'application/json');
           res.send(JSON.stringify({ response: 'success', existingEmail: false }, null, 3));
