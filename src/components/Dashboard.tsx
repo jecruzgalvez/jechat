@@ -21,7 +21,7 @@ class Dashboard extends React.Component {
 
       </Grid>
       
-    )
+    );
   }
 }
 

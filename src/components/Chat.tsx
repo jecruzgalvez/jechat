@@ -49,7 +49,7 @@ class Chat extends React.Component <{}, ChatState> {
 
   render() {
     return (
-      <Jumbotron>
+      <Jumbotron className="w-100 h-100">
         Participants: Contact 1, Contact2
         <form>          
           <div>

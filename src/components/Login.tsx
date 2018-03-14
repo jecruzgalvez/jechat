@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Redirect } from 'react-router';
 
-import '../../node_modules/bootstrap/dist/css/bootstrap.css';
-import { Alert, Button, Jumbotron, Grid, Col, Row } from 'react-bootstrap';
+import { Alert, Button, Jumbotron, Form, FormGroup, HelpBlock, FormControl, Col } from 'react-bootstrap';
 
 interface LoginState {
-  inputEmail?: string;
-  inputPassword?: string;
+  inputEmail: string;
+  inputEmailError: boolean;
+  inputPassword: string;
+  inputPasswordError: boolean;
   loggedIn: boolean;
   loginFailed: boolean;
   clickedRegister: boolean;
@@ -15,72 +16,117 @@ interface LoginState {
 class Login extends React.Component <{}, LoginState> {
   constructor(props: {}) {
     super(props);
-    
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleInputEmail = this.handleInputEmail.bind(this);
-    this.handleInputPassword = this.handleInputPassword.bind(this);
-    this.handleRegister = this.handleRegister.bind(this);
-    this.handleTryAgain = this.handleTryAgain.bind(this);
-    
+
     this.state = {
       inputEmail: 'jcruz@tekmexico.com',
+      inputEmailError: false,
       inputPassword: '',
+      inputPasswordError: false,
       loggedIn: false,
       loginFailed: false,
       clickedRegister: false
-    }
-  }
-
-  handleInputEmail(event: React.ChangeEvent <HTMLInputElement>) {
-    // console.log('Typed: ', event.target.value);
-    this.setState( {inputEmail: event.target.value}); //.replace(/^[a-z]$/ig, '')
-  }
-
-  handleInputPassword(event: React.ChangeEvent <HTMLInputElement>) {
-    // console.log('Typed: ', event.target.value);
-    this.setState( {inputPassword: event.target.value});
-  }
-
-  handleSubmit(event : React.MouseEvent <HTMLInputElement> ) {
-    let url = '/login';
-    let data = {
-      email: this.state.inputEmail,
-      password: this.state.inputPassword
     };
 
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: new Headers({
-        'Content-Type': 'application/json'
+    this.handleInputEmail = this.handleInputEmail.bind(this);
+    this.validateInputEmail = this.validateInputEmail.bind(this);
+    this.emailGetValidationState = this.emailGetValidationState.bind(this);
+
+    this.handleInputPassword = this.handleInputPassword.bind(this);
+    this.validateInputPassword = this.validateInputPassword.bind(this);
+    this.passwordGetValidationState = this.passwordGetValidationState.bind(this);
+
+    this.handleRegistration = this.handleRegistration.bind(this);
+    this.handleTryAgain = this.handleTryAgain.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleInputEmail(event: React.ChangeEvent <FormControl & HTMLInputElement>) {
+    // let x = event as any as React.ChangeEvent <HTMLInputElement>;
+    // this.setState( {inputPassword: event.currentTarget.value});
+    this.setState({inputEmail: event.target.value});
+  }
+  validateInputEmail() {
+    let emailRegularExpression = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    if ( ! emailRegularExpression.test(this.state.inputEmail) ) {
+      this.setState({ inputEmailError: true });
+    } else {
+      this.setState({ inputEmailError: false });
+    }
+  }
+  emailGetValidationState() {
+    if ( this.state.inputEmailError ) {
+      return 'error';
+    }
+    return null;
+  }
+
+  handleInputPassword(event: React.ChangeEvent <FormControl & HTMLInputElement>) {
+    // let x = event as any as React.ChangeEvent <HTMLInputElement>;    
+    // this.setState( {inputPassword: event.currentTarget.value});
+    this.setState( {inputPassword: event.target.value});
+  }
+  validateInputPassword() {
+    if ( this.state.inputPassword.length < 3 || this.state.inputPassword.length > 5) {
+      this.setState({inputPasswordError: true});
+    } else {
+      this.setState({inputPasswordError: false});
+    }
+  }
+  passwordGetValidationState() {
+    if ( this.state.inputPasswordError ) {
+      return 'error';
+    }
+    return null;
+  }
+
+  handleSubmit(event: React.MouseEvent <FormControl> ) {
+    if ( this.state.inputEmailError || this.state.inputPasswordError) {
+      // console.log('Cant continue with form errors');
+    } else {
+      let url = '/login';
+      let data = {
+        email: this.state.inputEmail,
+        password: this.state.inputPassword
+      };
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
       })
-    })
-    .then(res => res.json())
-    .catch(error => console.error('Error:', error))
-    .then(res => {      
-      if(res.response === "success"){
-        this.setState({loggedIn: true});
-      }
-      else
-        this.setState({
-          inputEmail: 'jcruz@tekmexico.com',
-          inputPassword: '',
-          loggedIn: false,
-          loginFailed: true
-        });
-    });
-    
+      .then(res => res.json())
+      .catch(error => console.error('Error:', error))
+      .then(res => {
+        if (res.response === 'success') {
+          this.setState({loggedIn: true});
+        } else {
+          this.setState({
+            inputEmail: 'jcruz@tekmexico.com',
+            inputEmailError: false,
+            inputPassword: '',
+            inputPasswordError: false,
+            loggedIn: false,
+            loginFailed: true,
+            clickedRegister: false
+          });
+        }          
+      });    
+    }
     event.preventDefault();
   }
 
-  handleRegister() {
+  handleRegistration() {
     this.setState({clickedRegister: true});
   }
 
   handleTryAgain() {
     this.setState({
       inputEmail: 'jcruz@tekmexico.com',
+      inputEmailError: false,
       inputPassword: '',
+      inputPasswordError: false,
       loggedIn: false,
       loginFailed: false,
       clickedRegister: false
@@ -91,19 +137,19 @@ class Login extends React.Component <{}, LoginState> {
     if (this.state.loggedIn) {
       return(
         <Redirect to="/dashboard" />
-      )
+      );
     }
 
-    if(this.state.clickedRegister) {
+    if (this.state.clickedRegister) {
       return(
         <Redirect to="/registration" />
-      )
+      );
     }
 
-    if(this.state.loginFailed) {
+    if (this.state.loginFailed) {
       return (
-        <Alert bsStyle="warning">
-          <h4>This user does not exist!</h4>
+        <Alert bsStyle="danger">
+          <h2>The user does not exist!</h2>
           <Button 
             bsStyle="primary"
 
@@ -116,60 +162,80 @@ class Login extends React.Component <{}, LoginState> {
 
           <Button
             bsStyle="primary"
-            onClick={this.handleRegister}
+            onClick={this.handleRegistration}
           >
             Register
           </Button>
         </Alert>
-      )
+      );
     }
 
     return (
-      <Jumbotron>
-        <form>                
-          <Grid>
-            <Row className="show-grid">
-              <Col xs={6} md={2} className="border text-left">
-                Email
-              </Col>
-              <Col xs={6} md={10} className="border  text-left">
-                <input
-                  type="email"
-                  onChange= {this.handleInputEmail}
+      <Jumbotron  className="w-100 h-100">
+        <Form horizontal={true} >
+
+          <FormGroup
+            controlId="formHorizontalEmail"
+            validationState={this.emailGetValidationState()}
+          >
+            <Col  sm={2}>
+              Email
+            </Col>
+            <Col sm={4}>
+              <FormControl
+                  type="text"
+                  value={this.state.inputEmail}
                   placeholder="jcruz@tekmexico.com"
-                  value= {this.state.inputEmail}              
-                />
-              </Col>
-            </Row>
+                  onChange={this.handleInputEmail}
+                  onBlur={this.validateInputEmail}
+              />
+            </Col>
+            <Col sm={6}>
+              {this.state.inputEmailError ?
+                  <HelpBlock>Please enter a valid e-mail address.</HelpBlock>
+                  :
+                  <HelpBlock />
+                }
+            </Col>
 
-            <Row className="show-grid">
-              <Col xs={6} md={2} className="border text-left">
-                Password
-              </Col>
-              <Col xs={6} md={10} className="border text-left">
-                <input
-                  type="password"
-                  onChange= {this.handleInputPassword}
-                  value= {this.state.inputPassword}
-                  placeholder="******"
-                />    
-              </Col>
-            </Row>
+          </FormGroup>
 
-            <Row className="show-grid">
-              <Col xs={6} md={2} className="border">
-                </Col>
-              <Col xs={6} md={10} className="border text-left">
-              <input
+          <FormGroup
+            controlId="formHorizontalPassword"
+            validationState={this.passwordGetValidationState()}
+          >
+            <Col  sm={2}>
+              Password
+            </Col>
+            <Col sm={4}>
+              <FormControl
+                type="password"
+                value={this.state.inputPassword}
+                placeholder="********"
+                onChange={this.handleInputPassword}
+                onBlur={this.validateInputPassword}
+              />
+            </Col>
+            <Col sm={6}>
+              { this.state.inputPasswordError ?
+                <HelpBlock>Your password needs to be between 3 and 5 characters long.</HelpBlock>
+                :
+                <HelpBlock/>
+            }
+            </Col>
+          </FormGroup>
+          
+          <FormGroup>
+            <Col smOffset={2} sm={5}>
+              <Button
                 type="submit"
                 onClick={this.handleSubmit}
-                value="Login"
-              />
-              </Col>
-            </Row>
-
-          </Grid>
-        </form>       
+              >
+                Sign in
+              </Button>
+            </Col>
+          </FormGroup>
+        </Form>
       </Jumbotron>
     );
   }

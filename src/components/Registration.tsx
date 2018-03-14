@@ -2,18 +2,18 @@ import * as React from 'react';
 import { Redirect } from 'react-router';
 
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
-import { Alert, Button, Jumbotron, Grid, Row, Col} from 'react-bootstrap';
+import { Alert, Button, Jumbotron, Grid, Row, Col } from 'react-bootstrap';
 
 interface RegisterState {
-  inputUserName?:string;
+  inputUserName?: string;
   inputEmail?: string;
   inputPassword?: string;
-  inputPasswordConfirmation?:string;
+  inputPasswordConfirmation?: string;
   registerSuccessful: boolean;
   existingUser: boolean;
 }
 
-class Registration extends React.Component <{}, RegisterState>{
+class Registration extends React.Component <{}, RegisterState> {
   constructor(props: {}) {
     super(props);
     
@@ -24,7 +24,6 @@ class Registration extends React.Component <{}, RegisterState>{
     this.handleInputPasswordConfirmation = this.handleInputPasswordConfirmation.bind(this);
     this.handleTryAgain = this.handleTryAgain.bind(this);
 
-
     this.state = {
       inputUserName: '',
       inputEmail: 'jcruz@tekmexico.com',
@@ -32,7 +31,7 @@ class Registration extends React.Component <{}, RegisterState>{
       inputPasswordConfirmation: '',
       registerSuccessful: false,
       existingUser: false
-    }
+    };
   }
 
   handleInputUserName(event: React.ChangeEvent <HTMLInputElement>) {
@@ -47,7 +46,7 @@ class Registration extends React.Component <{}, RegisterState>{
   handleInputPasswordConfirmation(event: React.ChangeEvent <HTMLInputElement>) {
     this.setState( {inputPasswordConfirmation: event.target.value});
   }
-  handleSubmit(event : React.MouseEvent <HTMLInputElement> ) {
+  handleSubmit(event: React.MouseEvent <HTMLInputElement>) {
     let url = '/registration';
     let data = {
       userName: this.state.inputUserName,
@@ -65,12 +64,11 @@ class Registration extends React.Component <{}, RegisterState>{
     .then(res => res.json())
     .catch(error => console.error('Error:', error))
     .then(res => {
-      if(res.response === "success"){
-        console.log("SUCCESS ", res.existingEmail);
+      if (res.response === 'success') {
+        // console.log("SUCCESS ", res.existingEmail);
         this.setState({registerSuccessful: true});
-      }
-      else {
-        console.log("FAIL ", res.existingEmail);
+      } else {
+        // console.log('FAIL ', res.existingEmail);
         this.setState({existingUser: true});
 
       }
@@ -94,7 +92,7 @@ class Registration extends React.Component <{}, RegisterState>{
     if (this.state.registerSuccessful) {
       return(
         <Redirect to="/login" />
-      )
+      );
     }
 
     if (this.state.existingUser) {
@@ -109,7 +107,7 @@ class Registration extends React.Component <{}, RegisterState>{
             Try again
           </Button>
         </Alert>
-      )
+      );
     }
 
     return (
@@ -124,9 +122,9 @@ class Registration extends React.Component <{}, RegisterState>{
               <Col xs={6} md={10} className="border text-left">
                 <input
                   type="userName"
-                  onChange= {this.handleInputUserName}
+                  onChange={this.handleInputUserName}
                   placeholder="User Name"
-                  value= {this.state.inputUserName}
+                  value={this.state.inputUserName}
                 />
               </Col>
             </Row>
@@ -138,9 +136,9 @@ class Registration extends React.Component <{}, RegisterState>{
               <Col xs={6} md={10} className="border text-left">
                 <input
                   type="email"
-                  onChange= {this.handleInputEmail}
+                  onChange={this.handleInputEmail}
                   placeholder="jcruz@tekmexico.com"
-                  value= {this.state.inputEmail}
+                  value={this.state.inputEmail}
                 />
               </Col>
             </Row>
@@ -152,8 +150,8 @@ class Registration extends React.Component <{}, RegisterState>{
               <Col xs={6} md={10} className="border text-left">
                 <input
                   type="text"
-                  onChange= {this.handleInputPassword}
-                  value= {this.state.inputPassword}
+                  onChange={this.handleInputPassword}
+                  value={this.state.inputPassword}
                 />
               </Col>
             </Row>
@@ -165,15 +163,14 @@ class Registration extends React.Component <{}, RegisterState>{
               <Col xs={6} md={10} className="border text-left">
                 <input
                   type="text"
-                  onChange= {this.handleInputPasswordConfirmation}
-                  value= {this.state.inputPasswordConfirmation}
+                  onChange={this.handleInputPasswordConfirmation}
+                  value={this.state.inputPasswordConfirmation}
                 />
               </Col>
             </Row>
 
             <Row className="show-grid">            
-              <Col xs={6} md={2} className="border">                
-              </Col>
+              <Col xs={6} md={2} className="border" />
               <Col xs={6} md={10} className="border text-left">
                 <input
                   type="submit"

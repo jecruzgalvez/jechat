@@ -2,8 +2,6 @@ import * as React from 'react';
 import './App.css';
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-
-import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import { ButtonGroup, Button } from 'react-bootstrap';
 
 import Login from './components/Login';

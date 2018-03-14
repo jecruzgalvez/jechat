@@ -1,8 +1,7 @@
 import * as React from 'react';
 // import { Redirect } from 'react-router';
 
-import '../../node_modules/bootstrap/dist/css/bootstrap.css';
-import { Modal, Button, Jumbotron } from 'react-bootstrap';
+import { Modal, Button, Jumbotron, Glyphicon } from 'react-bootstrap';
 
 interface SidebarSatate {
   clickedContacts: boolean;
@@ -16,36 +15,31 @@ class Sidebar extends React.Component <{}, SidebarSatate> {
     this.state = {
       clickedContacts: false,
       contactsAscending: true
-    }
+    };
 
     this.handleClickNewGroup = this.handleClickNewGroup.bind(this);
     this.handleClickCancelNewGroup = this.handleClickCancelNewGroup.bind(this);
-    this.handleClickSortContacts = this.handleClickSortContacts.bind(this);
-
-    
+    this.handleClickSortContacts = this.handleClickSortContacts.bind(this);    
   }
 
   handleClickNewGroup() {
     this.setState({
       clickedContacts: true
-    })    
+    });
   }
 
   handleClickCancelNewGroup() {
     this.setState({
       clickedContacts: false
-    })    
+    });
   }
 
   handleClickSortContacts() {
-  if( this.state.contactsAscending )
-    this.setState({
-      contactsAscending: false
-    })
-  else
-    this.setState({
-      contactsAscending: true
-    })
+    if ( this.state.contactsAscending ) {
+      this.setState({contactsAscending: false});
+    } else {
+      this.setState({contactsAscending: true});
+    }    
   }
   
   render() {
@@ -59,7 +53,7 @@ class Sidebar extends React.Component <{}, SidebarSatate> {
 
             <Modal.Body>
             <ul>
-          
+              List of contacts to add to the group
             </ul>            
             </Modal.Body>
 
@@ -73,17 +67,22 @@ class Sidebar extends React.Component <{}, SidebarSatate> {
             </Modal.Footer>
           </Modal.Dialog>
         </div>
-      )
+      );
     }
 
     return (
-      <Jumbotron>
+      <Jumbotron className="w-100 h-100">
         <Button bsStyle="primary" onClick={this.handleClickNewGroup}>
           New group
         </Button>
         <hr/>
-        <Button bsStyle="primary" onClick={this.handleClickSortContacts}>
-          {this.state.contactsAscending ? "Contacts ascending" : "Contacts descending"}
+        <Button bsStyle="primary" onClick={this.handleClickSortContacts}>        
+          {'Contacts '}
+          {this.state.contactsAscending ? 
+            <Glyphicon glyph="glyphicon glyphicon-sort-by-alphabet" />
+            :
+            <Glyphicon glyph="glyphicon glyphicon-sort-by-alphabet-alt" />
+            }
         </Button>
         <ul>
           <li>Contact 1</li>
@@ -98,7 +97,7 @@ class Sidebar extends React.Component <{}, SidebarSatate> {
           <li>Contact 10</li>
         </ul>
       </Jumbotron>
-    )
+    );
   }
 }
 

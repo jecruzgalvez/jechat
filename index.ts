@@ -84,48 +84,45 @@ db.once('open', function() {
   // })
   
   app.post('/login', (req, res) => {
-    User.find({
-      "email" : req.body.email,
-	    "password" : req.body.password
-      },
+    User.find(
+      { 'email': req.body.email, 'password': req.body.password },
       ( err, existingUser ) => {
-        console.log(err, existingUser);
-        if( err ) {
+        // console.log(err, existingUser);
+        if ( err ) {
           res.status(500).send();
         }
-        if ( existingUser.toString() === '' ){
+        if ( existingUser.toString () === '' ) {
           res.setHeader('Content-Type', 'application/json');
           res.send(JSON.stringify({ response: 'fail' }, null, 3));
-        }
-        else {
+        } else {
           res.setHeader('Content-Type', 'application/json');
           res.send(JSON.stringify({ response: 'success', user: existingUser }, null, 3));
         }
-      });
+      }
+    );
   });
 
   app.post('/registration', (req, res) => {
-    User.find({
-      "email" : req.body.email
-      },
+    User.find(
+      { 'email' : req.body.email },
       ( err, existingEmail ) => {
         console.log(err, existingEmail);
-        if( err ) {
+        if ( err ) {
           res.status(500).send();
         }
-        if ( existingEmail.toString() === '' ){
+        if ( existingEmail.toString() === '' ) {
           User.insertMany(req.body);
           console.log(req.body);
           console.log('User registration successfull');
           res.setHeader('Content-Type', 'application/json');
           res.send(JSON.stringify({ response: 'success', existingEmail: false }, null, 3));
-        }
-        else {
+        } else {
           console.log('The user already exist, impossible to register');
           res.setHeader('Content-Type', 'application/json');
           res.send(JSON.stringify({ response: 'fail', existingEmail: true }, null, 3));
         }
-      });
+      }
+    );
   });
 
   app.all('*', function (req, res) {
@@ -138,7 +135,7 @@ db.once('open', function() {
   io.on('connection', function(socket) {
     console.log('a user connected');
     
-    socket.on('disconnect', function(){
+    socket.on('disconnect', function() {
       console.log('user disconnected');
     });
   

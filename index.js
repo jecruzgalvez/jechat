@@ -74,11 +74,8 @@ db.once('open', function () {
     //     });
     // })
     app.post('/login', function (req, res) {
-        user_1.User.find({
-            "email": req.body.email,
-            "password": req.body.password
-        }, function (err, existingUser) {
-            console.log(err, existingUser);
+        user_1.User.find({ 'email': req.body.email, 'password': req.body.password }, function (err, existingUser) {
+            // console.log(err, existingUser);
             if (err) {
                 res.status(500).send();
             }
@@ -93,9 +90,7 @@ db.once('open', function () {
         });
     });
     app.post('/registration', function (req, res) {
-        user_1.User.find({
-            "email": req.body.email
-        }, function (err, existingEmail) {
+        user_1.User.find({ 'email': req.body.email }, function (err, existingEmail) {
             console.log(err, existingEmail);
             if (err) {
                 res.status(500).send();
