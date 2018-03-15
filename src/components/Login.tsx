@@ -149,7 +149,7 @@ class Login extends React.Component <{}, LoginState> {
     if (this.state.loginFailed) {
       return (
         <Alert bsStyle="danger">
-          <h2>The user does not exist!</h2>
+          <h2>Login failed!</h2>
           <Button 
             bsStyle="primary"
 
