@@ -18,7 +18,7 @@ class Login extends React.Component <{}, LoginState> {
     super(props);
 
     this.state = {
-      inputEmail: 'jcruz@tekmexico.com',
+      inputEmail: 'a@gmail.com',
       inputEmailError: false,
       inputPassword: '',
       inputPasswordError: false,
@@ -103,7 +103,7 @@ class Login extends React.Component <{}, LoginState> {
           this.setState({loggedIn: true});
         } else {
           this.setState({
-            inputEmail: 'jcruz@tekmexico.com',
+            inputEmail: 'a@gmail.com',
             inputEmailError: false,
             inputPassword: '',
             inputPasswordError: false,
@@ -123,7 +123,7 @@ class Login extends React.Component <{}, LoginState> {
 
   handleTryAgain() {
     this.setState({
-      inputEmail: 'jcruz@tekmexico.com',
+      inputEmail: 'a@gmail.com',
       inputEmailError: false,
       inputPassword: '',
       inputPasswordError: false,
@@ -185,7 +185,7 @@ class Login extends React.Component <{}, LoginState> {
               <FormControl
                   type="text"
                   value={this.state.inputEmail}
-                  placeholder="jcruz@tekmexico.com"
+                  placeholder="a@gmail.com"
                   onChange={this.handleInputEmail}
                   onBlur={this.validateInputEmail}
               />

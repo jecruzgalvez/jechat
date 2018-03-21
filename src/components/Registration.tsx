@@ -24,7 +24,7 @@ class Registration extends React.Component <{}, RegisterState> {
     this.state = {
       inputUserName: '',
       inputUserNameError: false,
-      inputEmail: 'jcruz@tekmexico.com',
+      inputEmail: 'a@gmail.com',
       inputEmailError: false,
       inputPassword: '',
       inputPasswordError: false,
@@ -176,7 +176,7 @@ class Registration extends React.Component <{}, RegisterState> {
   handleTryAgain() {
     this.setState({
       inputUserName: '',
-      inputEmail: 'jcruz@tekmexico.com',
+      inputEmail: 'a@gmail.com',
       inputPassword: '',
       inputPasswordConfirmation: '',
       registerSuccessful: false,
@@ -248,7 +248,7 @@ class Registration extends React.Component <{}, RegisterState> {
               <FormControl
                   type="text"
                   value={this.state.inputEmail}
-                  placeholder="jcruz@tekmexico.com"
+                  placeholder="a@gmail.com"
                   onChange={this.handleInputEmail}
                   onBlur={this.validateInputEmail}
               />

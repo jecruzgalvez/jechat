@@ -109,6 +109,64 @@ db.once('open', function () {
             }
         });
     });
+    //dont send the email,  look the sessio store
+    app.post('/getContactsList', function (req, res) {
+        // console.log(req.body);
+        user_1.User.findOne({ email: req.body.email })
+            .populate('friends')
+            .exec(function (err, friends) {
+            if (err) {
+                res.status(500).send();
+            }
+            else {
+                if (friends)
+                    console.log('Friends: ', friends);
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify({ response: 'success', friends: friends }, null, 3));
+            }
+        });
+    });
+    app.get('/populate', function (req, res) {
+        var a = new user_1.User({
+            _id: new mongoose.Types.ObjectId(),
+            userName: 'a',
+            email: 'a@gmail.com',
+            password: 'aaa'
+        });
+        a.save();
+        var b = new user_1.User({
+            _id: new mongoose.Types.ObjectId(),
+            userName: 'b',
+            email: 'b@gmail.com',
+            password: 'bbb',
+            friends: a._id
+        });
+        b.save();
+        var c = new user_1.User({
+            _id: new mongoose.Types.ObjectId(),
+            userName: 'c',
+            email: 'c@gmail.com',
+            password: 'ccc',
+            friends: [a._id, b._id]
+        });
+        c.save();
+        var d = new user_1.User({
+            _id: new mongoose.Types.ObjectId(),
+            userName: 'd',
+            email: 'd@gmail.com',
+            password: 'ddd',
+            friends: [a._id, b._id, c._id]
+        });
+        d.save();
+        var e = new user_1.User({
+            _id: new mongoose.Types.ObjectId(),
+            userName: 'e',
+            email: 'e@gmail.com',
+            password: 'eee',
+            friends: [a._id, b._id, c._id, d._id]
+        });
+        e.save();
+    });
     app.all('*', function (req, res) {
         res.status(404).send();
     });
