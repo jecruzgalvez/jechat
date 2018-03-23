@@ -6,10 +6,10 @@ interface actionType {
 const visibilityFilter = (state = 'ASCENDING', action: actionType) => {
   switch (action.type) {
     case 'SET_VISIBILITY_FILTER':
-      return action.filter
+      return action.filter;
     default:
-      return state
+      return state;
   }
 }
 
-export default visibilityFilter
+export default visibilityFilter;

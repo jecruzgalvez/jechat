@@ -12,6 +12,9 @@ import Settings from './components/Settings';
 import Logout from './components/Logout';
 import AppFooter from './components/Footer';
 
+import BookList from './containers/book-list';
+import BookDetail from './containers/book-detail';
+
 const App = () => (
   <div className="App">
     <AppHeader />
@@ -59,6 +62,10 @@ const App = () => (
       </div>
     </Router>
     <AppFooter />
+
+    <BookList />
+    <BookDetail />
+    
   </div>
 );
 
