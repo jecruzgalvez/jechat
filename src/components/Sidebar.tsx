@@ -4,7 +4,7 @@ import * as React from 'react';
 import SearchContacts from './SearchContacts';
 import NewGroup from './NewGroup';
 import ContactsOrder from './ContactsOrder';
-import ContactsList from './ContactsList';
+import ContactsList from '../containers/ContactsList';
 
 import { Button, ButtonGroup, Jumbotron } from 'react-bootstrap';
 

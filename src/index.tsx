@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from '../src/reducers';
+import reducers from '../src/reducers';
 
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
@@ -12,7 +12,7 @@ import './index.css';
 import './bootstrap-3.3.7-dist/css/bootstrap.css';
 import './bootstrap-3.3.7-dist/css/bootstrap-theme.css';
 
-const store = createStore(reducer);
+const store = createStore(reducers);
 
 ReactDOM.render(
   <Provider store={store}>

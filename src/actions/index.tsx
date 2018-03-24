@@ -23,3 +23,13 @@ export function selectBook(book: any ) {
     payload: book
   };
 }
+
+export function getContactsList(contacts: {_id: string, userName: string}[] ) {
+
+  //thunk
+
+  return {
+      type: "FETCH_CONTACTS",
+      payload: contacts // [{_id:'1', userName:'Jorge'},{_id:'2', userName:'Elpidio'} ]
+    }
+}

@@ -113,14 +113,14 @@ db.once('open', function () {
     app.post('/getContactsList', function (req, res) {
         // console.log(req.body);
         user_1.User.findOne({ email: req.body.email })
-            .populate('friends')
+            .populate('friends', 'userName')
             .exec(function (err, friends) {
             if (err) {
                 res.status(500).send();
             }
             else {
                 if (friends)
-                    console.log('Friends: ', friends);
+                    console.log('Friendssssssssssssssssssssss: ', friends['friends']);
                 res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.stringify({ response: 'success', friends: friends }, null, 3));
             }
