@@ -1,9 +1,10 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import reducers from '../src/reducers';
+import thunk from 'redux-thunk';
+import rootReducer from '../src/reducers/index';
 
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
@@ -12,7 +13,7 @@ import './index.css';
 import './bootstrap-3.3.7-dist/css/bootstrap.css';
 import './bootstrap-3.3.7-dist/css/bootstrap-theme.css';
 
-const store = createStore(reducers);
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>

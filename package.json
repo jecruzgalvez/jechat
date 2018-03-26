@@ -33,6 +33,7 @@
     "react-scripts-ts": "2.13.0",
     "redux": "^3.7.2",
     "redux-actions": "^2.3.0",
+    "redux-thunk": "^2.2.0",
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
     "stylus": "^0.54.5"
@@ -63,6 +64,7 @@
     "@types/react-router-dom": "^4.2.4",
     "@types/redux": "^3.6.0",
     "@types/redux-actions": "^2.2.4",
+    "@types/redux-thunk": "^2.1.0",
     "@types/socket.io": "^1.4.31",
     "@types/socket.io-client": "^1.4.32",
     "babel-preset-typescript": "^7.0.0-alpha.19",
