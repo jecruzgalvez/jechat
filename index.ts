@@ -124,20 +124,19 @@ db.once('open', function() {
       }
     );
   });
-//dont send the email,  look the sessio store
-  app.post('/getContactsList', (req, res) => {
+//dont send the email, look the session store
+  app.post('/apiFetchContactsList', (req, res) => {
     // console.log(req.body);
     User.findOne( {email: req.body.email})
       .populate('friends','userName')
       .exec( function (err, friends) {
         if ( err ) {
           res.status(500).send();
-        } else {
-          if ( friends)
-            console.log('Friendssssssssssssssssssssss: ', friends['friends']);
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify({ response: 'success', friends }, null, 3));
-          }
+        } else if ( friends) {
+          console.log('Friendssssssssssssssssssssss: ', friends['friends']);
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify({ response: 'success', friends: friends['friends'] }, null, 3));
+        }          
       });
   });
 

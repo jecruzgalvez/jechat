@@ -19,8 +19,7 @@
 // }
 
 export default function(state = [], action: {type: string, payload: {_id: string, userName: string}[]}) {  
-  // debugger
-  switch (action.type) {
+  switch (action.type) {    
     case "FETCH_CONTACTS":
       return action.payload;
     default:
