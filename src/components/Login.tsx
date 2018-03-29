@@ -1,4 +1,6 @@
 import * as React from 'react';
+import axios from 'axios';
+
 import { Redirect } from 'react-router';
 
 import { Alert, Button, Jumbotron, Form, FormGroup, HelpBlock, FormControl, Col } from 'react-bootstrap';
@@ -82,24 +84,18 @@ class Login extends React.Component <{}, LoginState> {
   handleSubmit(event: React.MouseEvent <FormControl> ) {
     if ( this.state.inputEmailError || this.state.inputPasswordError) {
       // console.log('Cant continue with form errors');
-    } else {
-      let url = '/login';
-      let data = {
-        email: this.state.inputEmail,
-        password: this.state.inputPassword
-      };
-
-      fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
+    } else 
+    {
+      axios.get('/api/login',{
+          params: {
+            email: this.state.inputEmail,
+            password: this.state.inputPassword
+          }
       })
-      .then(res => res.json())
-      .catch(error => console.error('Error:', error))
-      .then(res => {
-        if (res.response === 'success') {
+      .then( (response: any) => {
+        console.log('response: ',response);
+        
+        if (response.data.response === 'success') {
           this.setState({loggedIn: true});
         } else {
           this.setState({
@@ -111,8 +107,11 @@ class Login extends React.Component <{}, LoginState> {
             loginFailed: true,
             clickedRegister: false
           });
-        }          
-      });    
+        }
+      })
+      .catch( (error: any) => {
+        console.error('Error:', error);
+      });
     }
     event.preventDefault();
   }

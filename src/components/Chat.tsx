@@ -26,6 +26,7 @@ class Chat extends React.Component <{}, ChatState> {
       inputText: ''
     };
     this.handleSend = this.handleSend.bind(this);
+    this.handleSend2 = this.handleSend2.bind(this);
     this.handleInputText = this.handleInputText.bind(this);
   }
   
@@ -42,6 +43,23 @@ class Chat extends React.Component <{}, ChatState> {
       this.setState({inputText: ''});
       event.preventDefault();     
   }
+
+  handleSend2(event: React.MouseEvent <HTMLInputElement>) {   
+      let url = '/api/newConversation/5abadd8a465a9864b1673c09';
+      let data = {
+        user:      '5abadd8a465a9864b1673c08',
+        composedMessage: 'Hola..............'
+      };
+      event.preventDefault();
+
+      return fetch(url, {
+        method: 'POST',        
+        body: JSON.stringify(data),        
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      })
+}
 
   handleInputText(event: React.ChangeEvent <HTMLInputElement>) {
     this.setState({inputText: event.target.value});    
@@ -66,7 +84,7 @@ class Chat extends React.Component <{}, ChatState> {
             onChange={this.handleInputText}
           />
           <button
-            onClick={this.handleSend}
+            onClick={this.handleSend2}
           >
             Send
           </button>

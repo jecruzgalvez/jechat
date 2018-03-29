@@ -1,16 +1,4 @@
 import * as mongoose from 'mongoose';
-// import { ObjectId, ObjectID } from 'bson';
-
-// let friendSchema = new mongoose.Schema({
-//   friendsEmail: {
-//     type: String,
-//     required: true
-//   },
-//   friendsName: {
-//     type: String,
-//     required: true
-//   }
-// });
 
 // User schema
 let Schema = mongoose.Schema,
