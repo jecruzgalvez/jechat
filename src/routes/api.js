@@ -230,7 +230,6 @@ exports.newConversation = function (req, res, next) {
  * GET fetchMessages API
  */
 exports.fetchMessages = function (req, res, next) {
-    // let userId = req.cookies['userId'];
     var conversationId = req.query.conversationId;
     // conversationId = '5ac3b52b92260d1bf6b81d88';
     console.log('conversationId', conversationId);
@@ -238,23 +237,20 @@ exports.fetchMessages = function (req, res, next) {
         res.status(422).send({ error: 'Please choose a valid conversation Id for your messages.' });
         return next();
     }
-    // Set up empty array to hold conversations + most recent message
-    // let fullConversations: any = [];
-    // conversations.forEach(function(conversation) {
-    message_1.Message.find({ 'conversationId': conversationId })
+    message_1.Message.find({ 'conversationId': conversationId }, { body: 1, author: 1, createdAt: 1 })
+        .sort('createdAt')
         .exec(function (err, messages) {
         if (err) {
             res.send({ error: err });
             return next(err);
         }
-        console.log('mesages===============>', messages);
-        // fullConversations.push(message);
-        // if(fullConversations.length === conversations.length) {
-        // console.log(fullConversations);
-        // return res.status(200).json({ conversations: fullConversations });
-        // }
+        else {
+            console.log('mesages===============>', messages);
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify({ messages: messages }));
+        }
+        return next();
     });
-    // });
 };
 /*
  * GET fetchMessages API
@@ -288,8 +284,25 @@ exports.saveMessage = function (req, res, next) {
             res.send({ error: err });
             return next(err);
         }
-        console.log('newMessage=============>', newMessage);
-        // res.status(200).json({ message: 'Conversation started!', conversationId: conversation._id });
+        else {
+            message_1.Message.find({ 'conversationId': conversationId }, { body: 1, author: 1, createdAt: 1 })
+                .sort('createdAt')
+                .exec(function (err, messages) {
+                if (err) {
+                    res.send({ error: err });
+                    return next(err);
+                }
+                else {
+                    console.log('mesages===============>', messages);
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify({ messages: messages }));
+                }
+                return next();
+            });
+            // console.log('newMessage=============>', newMessage);
+            // res.setHeader('Content-Type', 'application/json');
+            // res.send(JSON.stringify({ status: 'messageSaved' }));
+        }
         return next();
     });
 };

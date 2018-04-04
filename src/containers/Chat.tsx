@@ -2,14 +2,16 @@ import * as React from "react";
 import { connect } from "react-redux";
 // import axios from 'axios';
 import * as io from 'socket.io-client';
-import { Jumbotron } from 'react-bootstrap';
+import { Jumbotron, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { saveMessage } from "../actions/index";
 
 var socket: SocketIOClient.Socket;
 
 interface ChatProps {
-  friends: {_id: string, firstName: string}[];
+  // friends: {_id: string, firstName: string}[];
+  // conversations: {_id: string, participants: string[]}[];
   conversations: {_id: string, participants: string[]}[];
+  messages: any;
   saveMessage: (conversationId: any, body: any) => void;
 }
 
@@ -55,11 +57,25 @@ class Chat extends React.Component <ChatProps, ChatState> {
   handleSend2(event: React.MouseEvent <HTMLInputElement>) {
     event.preventDefault();
     this.setState({inputText: ''});    
-    this.props.saveMessage('5ac50968d6a9d71d043294dc', this.state.inputText);
+    this.props.saveMessage('5ac51af267ef0227d8543e55', this.state.inputText);
   }
 
   handleInputText(event: React.ChangeEvent <HTMLInputElement>) {
     this.setState({inputText: event.target.value});    
+  }
+
+  renderList() {
+    return this.props.messages.map((message: any) => {
+      // let participants = conv.participants.map( (participant) => {
+      //   return '*****' + participant ;
+      // })
+      return (
+        <ListGroupItem key={message._id}>
+          {message.body}
+          {/* {participants} */}
+        </ListGroupItem>        
+      );
+    });
   }
 
   render() {
@@ -68,11 +84,15 @@ class Chat extends React.Component <ChatProps, ChatState> {
         Participants: Contact 1, Contact2
         <form>          
           <div>
-            <textarea
+            {/* <textarea
               cols={30}
               rows={10}
               value={this.state.response}
-            />            
+            />             */}
+            <ListGroup>
+              {this.renderList()}
+            </ListGroup>
+
           </div>
           <br/>
           <input
@@ -93,8 +113,8 @@ class Chat extends React.Component <ChatProps, ChatState> {
 
 function mapStateToProps(state: any) {  
   return {
-    friends: state.friends,
-    conversations: state.conversations
+    conversations: state.conversations,
+    messages: state.messages
   };
 }
 function mapDispatchToProps(dispatch: any) {

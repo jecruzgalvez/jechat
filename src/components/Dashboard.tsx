@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Sidebar from './Sidebar';
-import Chat from './Chat';
+import Chat from '../containers/Chat';
 
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import { Grid, Row, Col } from 'react-bootstrap';

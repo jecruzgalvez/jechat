@@ -67,6 +67,7 @@ export function newConversation(recipient: any) {
   return function (dispatch: any) {
     return API_NewConversation(recipient).then(
       success => {
+        debugger
         dispatch(newConversation_OnSuccess(success.data['conversations']));
       },
       error => {
@@ -137,7 +138,7 @@ export function saveMessage(conversationId: any, body: any) {
   return function (dispatch: any) {
     return API_SaveMessage(conversationId, body).then(
       success => {
-        dispatch(saveMessage_OnSuccess(success.data['response']));
+        dispatch(saveMessage_OnSuccess(success.data['messages']));
       },
       error => {
         dispatch(saveMessage_OnError(error))
@@ -157,10 +158,11 @@ function API_FetchMessages(conversationId: any) {
     }
   });
 }
-function fetchMessages_OnSuccess(success: {_id: string, userName: string}[]) {
+function fetchMessages_OnSuccess(success: {_id: string, userName: string}[], conversationId: string) {
   return {
     type: FETCH_MESSAGES,
-    payload: success
+    actualConversation: conversationId,
+    payload: success,
   };
 }
 function fetchMessages_OnError(error: any) {
@@ -173,7 +175,7 @@ export function fetchMessages(conversationId: any) {
   return function (dispatch: any) {
     return API_FetchMessages(conversationId).then(
       success => {
-        dispatch(fetchMessages_OnSuccess(success.data['messages']));
+        dispatch(fetchMessages_OnSuccess(success.data['messages'], conversationId));
       },
       error => {
         dispatch(fetchMessages_OnError(error))

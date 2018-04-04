@@ -258,10 +258,9 @@ export const newConversation = (req: express.Request , res: express.Response, ne
  * GET fetchMessages API
  */
 export const fetchMessages = (req: express.Request , res: express.Response, next: Function) => {
-  // let userId = req.cookies['userId'];
   let conversationId = req.query.conversationId;
-  
   // conversationId = '5ac3b52b92260d1bf6b81d88';
+
   console.log('conversationId', conversationId);
 
   if(!conversationId) {
@@ -269,31 +268,20 @@ export const fetchMessages = (req: express.Request , res: express.Response, next
     return next();
   }
 
-  // Set up empty array to hold conversations + most recent message
-  // let fullConversations: any = [];
-  // conversations.forEach(function(conversation) {
-    Message.find({ 'conversationId': conversationId })
-      // .sort('-createdAt')
-      // .limit(1)
-      // .populate({
-      //   path: "author"
-      //   // select: "profile.firstName profile.lastName"
-      // })
-      .exec(function(err: any, messages: any) {
-        if (err) {
-          res.send({ error: err });
-          return next(err);
-        }
-        console.log('mesages===============>',messages)
-        // fullConversations.push(message);
-
-        // if(fullConversations.length === conversations.length) {
-
-          // console.log(fullConversations);
-          // return res.status(200).json({ conversations: fullConversations });
-        // }
-      });
-  // });
+  Message.find({ 'conversationId': conversationId }, {body: 1, author:1, createdAt: 1})
+    .sort('createdAt')
+    .exec(function(err: any, messages: any) {
+      if (err) {
+        res.send({ error: err });
+        return next(err);
+      }
+      else {                  
+        console.log('mesages===============>',messages);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ messages }));
+      }
+      return next();      
+    });
 }
 
 /*
@@ -333,10 +321,25 @@ export const saveMessage = (req: express.Request , res: express.Response, next: 
       res.send({ error: err });
       return next(err);
     }
-
-    console.log('newMessage=============>', newMessage);
-
-    // res.status(200).json({ message: 'Conversation started!', conversationId: conversation._id });
+    else {
+      Message.find({ 'conversationId': conversationId }, {body: 1, author:1, createdAt: 1})
+      .sort('createdAt')
+      .exec(function(err: any, messages: any) {
+        if (err) {
+          res.send({ error: err });
+          return next(err);
+        }
+        else {                  
+          console.log('mesages===============>',messages);
+          res.setHeader('Content-Type', 'application/json');
+          res.send(JSON.stringify({ messages }));
+        }
+        return next();      
+      });
+      // console.log('newMessage=============>', newMessage);
+      // res.setHeader('Content-Type', 'application/json');
+      // res.send(JSON.stringify({ status: 'messageSaved' }));
+    }
     return next();
   });
 }
