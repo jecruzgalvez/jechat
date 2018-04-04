@@ -1,10 +1,18 @@
-import * as React from 'react';
+import * as React from "react";
+import { connect } from "react-redux";
+// import axios from 'axios';
 import * as io from 'socket.io-client';
-
-import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import { Jumbotron } from 'react-bootstrap';
+import { saveMessage } from "../actions/index";
 
 var socket: SocketIOClient.Socket;
+
+interface ChatProps {
+  friends: {_id: string, firstName: string}[];
+  conversations: {_id: string, participants: string[]}[];
+  saveMessage: (conversationId: any, body: any) => void;
+}
+
 
 interface ChatState {
   response: string;
@@ -17,8 +25,8 @@ interface DataResponse {
   response: string;
 }
 
-class Chat extends React.Component <{}, ChatState> {
-  constructor(props: {}) {
+class Chat extends React.Component <ChatProps, ChatState> {
+  constructor(props: ChatProps) {
     super(props);
     this.state = {
       response: '',
@@ -39,27 +47,16 @@ class Chat extends React.Component <{}, ChatState> {
   }
 
   handleSend(event: React.MouseEvent <HTMLInputElement>) {
-      socket.emit('chat message', this.state.inputText);
-      this.setState({inputText: ''});
-      event.preventDefault();     
+    event.preventDefault();
+    socket.emit('chat message', this.state.inputText);
+    this.setState({inputText: ''});
   }
 
-  handleSend2(event: React.MouseEvent <HTMLInputElement>) {   
-      let url = '/api/newConversation/5abadd8a465a9864b1673c09';
-      let data = {
-        user:      '5abadd8a465a9864b1673c08',
-        composedMessage: 'Hola..............'
-      };
-      event.preventDefault();
-
-      return fetch(url, {
-        method: 'POST',        
-        body: JSON.stringify(data),        
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
-      })
-}
+  handleSend2(event: React.MouseEvent <HTMLInputElement>) {
+    event.preventDefault();
+    this.setState({inputText: ''});    
+    this.props.saveMessage('5ac50968d6a9d71d043294dc', this.state.inputText);
+  }
 
   handleInputText(event: React.ChangeEvent <HTMLInputElement>) {
     this.setState({inputText: event.target.value});    
@@ -94,4 +91,17 @@ class Chat extends React.Component <{}, ChatState> {
   }
 }
 
-export default Chat;
+function mapStateToProps(state: any) {  
+  return {
+    friends: state.friends,
+    conversations: state.conversations
+  };
+}
+function mapDispatchToProps(dispatch: any) {
+  return {
+    // fetchConversations: () => dispatch(fetchConversations()),
+    saveMessage: (conversationId: any, body: any) => dispatch(saveMessage(conversationId, body))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

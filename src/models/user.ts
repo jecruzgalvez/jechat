@@ -1,23 +1,47 @@
 import * as mongoose from 'mongoose';
 
+import {ROLE_ADMIN, ROLE_CLIENT, ROLE_MEMBER, ROLE_OWNER } from '../constants/roles';
+
 // User schema
 let Schema = mongoose.Schema,
     ObjectId = Schema.Types.ObjectId;
         
 let userSchema = new Schema({
-  userName: {
-    type: String,
-    required: true
-  },
   email: {
     type: String,
+    lowercase: true,
+    unique: true,
     required: true
   },
   password: {
     type: String,
     required: true
   },
-  friends: [{ type: ObjectId, ref: 'User' }]
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {    
+    type: String,
+  },
+  role: {
+    type: String,
+    enum: [ROLE_MEMBER, ROLE_CLIENT, ROLE_OWNER, ROLE_ADMIN],
+    default: ROLE_MEMBER
+  },
+  stripe: {
+    customerId: { type: String },
+    subscriptionId: { type: String },
+    lastFour: { type: String },
+    plan: { type: String },
+    activeUntil: { type: Date }
+  },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },  
+  friends: [{ type: ObjectId, ref: 'User' }],
+},
+{
+  timestamps: true
 });
 
 export const User = mongoose.model('User', userSchema);

@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { connect } from "react-redux";
-import { fetchContactsList } from "../actions/index";
-
 import { Modal, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { fetchFriends, newConversation } from "../actions/index";
 
-interface NewGroupProps {
-  handleToggleModalSearchContacts: () => void;
-  contacts: {_id: string, userName: string}[];
-  fetchContactsList: any;
+interface OneToOneProps {
+  handleToggleModalOneToOne: () => void;
+  friends: {_id: string, firstName: string}[];
+  fetchContacts: any;
+  newConversation: any;
 }
 
-class NewGroup extends React.Component <NewGroupProps, {}> {
-  constructor(props: NewGroupProps) {
+class OneToOne extends React.Component <OneToOneProps, {}> {
+  constructor(props: OneToOneProps) {
     super(props);
 
     this.handleClickListGroup = this.handleClickListGroup.bind(this);
@@ -19,21 +19,21 @@ class NewGroup extends React.Component <NewGroupProps, {}> {
 
 
   componentDidMount() {
-    this.props.fetchContactsList();
+    this.props.fetchContacts();
   }
 
   handleClickListGroup(event: React.MouseEvent <ListGroupItem & HTMLLIElement>) {
     console.log(event.currentTarget.dataset.id);
-
-
-    this.props.handleToggleModalSearchContacts();
+    // debugger;    
+    this.props.newConversation(event.currentTarget.dataset.id, event.currentTarget.dataset.firstname);
+    this.props.handleToggleModalOneToOne();
   }
 
   renderList() {
-    return this.props.contacts.map((contact ) => {
+    return this.props.friends.map((friend ) => {
       return (
-        <ListGroupItem key={contact._id} onClick={this.handleClickListGroup} data-id={contact._id}>
-          {contact.userName}
+        <ListGroupItem key={friend._id} onClick={this.handleClickListGroup} data-id={friend._id} data-firstname={friend.firstName} >
+          {friend.firstName} ---- {friend._id}
         </ListGroupItem>        
       );
     });
@@ -45,7 +45,7 @@ class NewGroup extends React.Component <NewGroupProps, {}> {
         <Modal.Dialog>
 
           <Modal.Header>
-            <Modal.Title>Click on a user to add to your contacts list.</Modal.Title>
+            <Modal.Title>Click on a user to add to your friends list.</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
@@ -57,7 +57,7 @@ class NewGroup extends React.Component <NewGroupProps, {}> {
           <Modal.Footer>
             <Button
               bsStyle="primary"
-              onClick={this.props.handleToggleModalSearchContacts}
+              onClick={this.props.handleToggleModalOneToOne}
             >
               Cancel
             </Button>
@@ -71,7 +71,7 @@ class NewGroup extends React.Component <NewGroupProps, {}> {
 
 function mapStateToProps(state: any) {  
   return {
-    contacts: state.contacts
+    friends: state.friends
   };
 }
 
@@ -81,8 +81,9 @@ function mapDispatchToProps(dispatch: any) {
   //   fetchContactsList: fetchContactsList
   // }, dispatch);
   return {
-    fetchContactsList: () => dispatch(fetchContactsList())
+    fetchContacts: () => dispatch(fetchFriends()),
+    newConversation: (recipient: any) => dispatch(newConversation(recipient))
   }  
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewGroup);
+export default connect(mapStateToProps, mapDispatchToProps)(OneToOne);

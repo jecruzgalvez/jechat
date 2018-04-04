@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
 import visibilityFilter from './visibilityFilter';
-import books from './reducer_book';
-import activeBook from './reducer_activeBook';
-import contacts from './reducer_contacts';
+import friends from './reducer_friends';
+import conversations from './reducer_conversations';
+import messages from './reducer_messages';
 
 const rootReducer = combineReducers({
   visibilityFilter,
-  books,
-  activeBook,
-  contacts
+  friends,
+  conversations,
+  messages
 })
 
 export default rootReducer;

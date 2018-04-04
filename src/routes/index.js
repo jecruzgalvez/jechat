@@ -5,6 +5,7 @@ exports.api = api;
 /*
  * GET home page.
  */
-var index = function () {
+var index = function (req, res, next) {
+    next();
 };
 exports.index = index;

@@ -12,13 +12,10 @@ import Settings from './components/Settings';
 import Logout from './components/Logout';
 import AppFooter from './components/Footer';
 
-// import BookList from './containers/book-list';
-// import BookDetail from './containers/book-detail';
-
 const App = () => (
   <div className="App">
     <AppHeader />
-    <Router>    
+    <Router>
       <div>
         <ButtonGroup>
           <Button bsStyle="primary">
@@ -36,12 +33,11 @@ const App = () => (
           <Button bsStyle="primary">
             <Link to="/logout" className="menu">Logout</Link>
           </Button>
-        </ButtonGroup>      
-
+        </ButtonGroup>
         <Route
           exact={true}
           path="/login"
-          component={Login}        
+          component={Login}
         />
         <Route
           path="/registration"
@@ -62,10 +58,6 @@ const App = () => (
       </div>
     </Router>
     <AppFooter />
-
-    {/* <BookList />
-    <BookDetail /> */}
-    
   </div>
 );
 

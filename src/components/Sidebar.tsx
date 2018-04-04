@@ -1,15 +1,15 @@
 import * as React from 'react';
 // import { Redirect } from 'react-router';
 
-import SearchContacts from './SearchContacts';
+import OneToOne from './OneToOne';
 import NewGroup from './NewGroup';
 import ContactsOrder from './ContactsOrder';
-import ContactsList from '../containers/ContactsList';
+import Conversations from '../containers/Conversations';
 
 import { Button, ButtonGroup, Jumbotron } from 'react-bootstrap';
 
 interface SidebarSatate {
-  showModalSearchContacts: boolean;
+  showModalOneToOne: boolean;
   showModalNewGroup: boolean;
 }
 
@@ -18,17 +18,17 @@ class Sidebar extends React.Component <{}, SidebarSatate> {
     super(props);
 
     this.state = {
-      showModalSearchContacts: false,
+      showModalOneToOne: false,
       showModalNewGroup: false
     };
 
-    this.handleToggleModalSearchContacts = this.handleToggleModalSearchContacts.bind(this);
+    this.handleToggleModalOneToOne = this.handleToggleModalOneToOne.bind(this);
     this.handleToggleModalNewGroup = this.handleToggleModalNewGroup.bind(this);
   }
 
-  handleToggleModalSearchContacts() {
+  handleToggleModalOneToOne() {
     this.setState({
-      showModalSearchContacts: !this.state.showModalSearchContacts
+      showModalOneToOne: !this.state.showModalOneToOne
     });
   }
 
@@ -43,14 +43,14 @@ class Sidebar extends React.Component <{}, SidebarSatate> {
       <Jumbotron className="w-100 h-100">
       
         <ButtonGroup>
-          <Button bsStyle="primary" onClick={this.handleToggleModalSearchContacts}> Search contacts </Button>
+          <Button bsStyle="primary" onClick={this.handleToggleModalOneToOne}> One to One </Button>
           <Button bsStyle="primary" onClick={this.handleToggleModalNewGroup}> New group </Button>
         </ButtonGroup>
-        {this.state.showModalSearchContacts ? <SearchContacts handleToggleModalSearchContacts ={this.handleToggleModalSearchContacts} /> : <div /> }        
+        {this.state.showModalOneToOne ? <OneToOne handleToggleModalOneToOne ={this.handleToggleModalOneToOne} /> : <div /> }        
         {this.state.showModalNewGroup ? <NewGroup handleToggleModalNewGroup={this.handleToggleModalNewGroup} /> : <div /> }
 
         <ContactsOrder />
-        <ContactsList />
+        <Conversations />
 
       </Jumbotron>
     );

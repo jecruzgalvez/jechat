@@ -7,17 +7,17 @@ var message_1 = require("../models/message");
 /*
  * GET populate API
  */
-exports.populate = function (req, res) {
+exports.populate = function (req, res, next) {
     var a = new user_1.User({
         _id: new mongoose.Types.ObjectId(),
-        userName: 'a',
+        firstName: 'a',
         email: 'a@gmail.com',
         password: 'aaa'
     });
     a.save();
     var b = new user_1.User({
         _id: new mongoose.Types.ObjectId(),
-        userName: 'b',
+        firstName: 'b',
         email: 'b@gmail.com',
         password: 'bbb',
         friends: a._id
@@ -25,7 +25,7 @@ exports.populate = function (req, res) {
     b.save();
     var c = new user_1.User({
         _id: new mongoose.Types.ObjectId(),
-        userName: 'c',
+        firstName: 'c',
         email: 'c@gmail.com',
         password: 'ccc',
         friends: [a._id, b._id]
@@ -33,7 +33,7 @@ exports.populate = function (req, res) {
     c.save();
     var d = new user_1.User({
         _id: new mongoose.Types.ObjectId(),
-        userName: 'd',
+        firstName: 'd',
         email: 'd@gmail.com',
         password: 'ddd',
         friends: [a._id, b._id, c._id]
@@ -41,7 +41,7 @@ exports.populate = function (req, res) {
     d.save();
     var e = new user_1.User({
         _id: new mongoose.Types.ObjectId(),
-        userName: 'e',
+        firstName: 'e',
         email: 'e@gmail.com',
         password: 'eee',
         friends: [a._id, b._id, c._id, d._id]
@@ -50,25 +50,44 @@ exports.populate = function (req, res) {
     res.send('Users creation successfull');
 };
 /*
- * POST fetchContacts API
+ * GET fetchFriends API
  */
-exports.fetchContacts = function (req, res) {
-    user_1.User.findOne({ _id: mongoose.Types.ObjectId(req.cookies['userId']) })
-        .populate('friends', 'userName')
+exports.fetchFriends = function (req, res, next) {
+    var userId = mongoose.Types.ObjectId(req.cookies['userId']);
+    if (!userId) {
+        res.status(500).send();
+    }
+    user_1.User.findOne({ _id: userId })
+        .populate('friends', 'firstName')
         .exec(function (err, friends) {
         if (err) {
             res.status(500).send();
         }
         else if (friends) {
             res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify({ response: 'success', friends: friends['friends'] }, null, 3));
+            res.send(JSON.stringify({ friends: friends['friends'] }));
+        }
+    });
+};
+/*
+ * GET fetchUsers API
+ */
+exports.fetchContacts = function (req, res, next) {
+    user_1.User.find({}, { firstName: 1 })
+        .exec(function (err, users) {
+        if (err) {
+            res.status(500).send();
+        }
+        else if (users) {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify({ contacts: users }));
         }
     });
 };
 /*
  * GET login API
  */
-exports.login = function (req, res) {
+exports.login = function (req, res, next) {
     var email = req.query.email;
     var password = req.query.password;
     if (!email || !password) {
@@ -89,6 +108,7 @@ exports.login = function (req, res) {
         else {
             res.cookie('auth', true);
             res.cookie('userId', user._id);
+            res.cookie('userName', user.firstName);
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify({ response: 'success', user: user }));
         }
@@ -98,7 +118,7 @@ exports.login = function (req, res) {
  * GET logout route.
  */
 exports.logout = function (req, res, next) {
-    res.cookie('auth', false);
+    res.clearCookie('auth');
     res.clearCookie('userId');
     res.end('Logout!');
     // res.redirect('/')
@@ -106,15 +126,15 @@ exports.logout = function (req, res, next) {
 /*
  * GET test API
  */
-exports.test = function (req, res) {
-    // console.log('---client request cookies header:\n', req.headers['cookie']);
-    // res.cookie('name', 'foo');
+exports.test = function (req, res, next) {
+    // console.log('------Actual cookies --------:\n', req.headers['cookie']);
+    console.log('------Actual cookies --------:\n', req.cookies);
     res.end('Test!');
 };
 /*
  * POST registration API
  */
-exports.registration = function (req, res) {
+exports.registration = function (req, res, next) {
     user_1.User.find({ 'email': req.body.email }, function (err, existingEmail) {
         console.log(err, existingEmail);
         if (err) {
@@ -135,75 +155,141 @@ exports.registration = function (req, res) {
     });
 };
 /*
- * POST getConversations API
+ * GET fetchConversations API
  */
-exports.getConversations = function (req, res, next) {
+exports.fetchConversations = function (req, res, next) {
+    var userId = req.cookies['userId'];
+    if (!userId) {
+        res.status(422).send({ error: 'Please choose a valid userId for your conversation.' });
+        return next();
+    }
     // Only return one message from each conversation to display as snippet
-    conversation_1.Conversation.find({ participants: req.user._id })
+    conversation_1.Conversation.find({ participants: userId })
         .select('_id')
         .exec(function (err, conversations) {
         if (err) {
+            // console.log('eeeeeeeeeeeeeeeeeeee',err);
             res.send({ error: err });
             return next(err);
         }
-        // Set up empty array to hold conversations + most recent message
-        var fullConversations = [];
-        conversations.forEach(function (conversation) {
-            message_1.Message.find({ 'conversationId': conversation._id })
-                .sort('-createdAt')
-                .limit(1)
-                .populate({
-                path: "author",
-                select: "profile.firstName profile.lastName"
-            })
-                .exec(function (err, message) {
-                if (err) {
-                    res.send({ error: err });
-                    return next(err);
-                }
-                fullConversations.push(message);
-                if (fullConversations.length === conversations.length) {
-                    return res.status(200).json({ conversations: fullConversations });
-                }
-            });
+        else {
+            // console.log('cccccccccccccccccccc',conversations);
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify({ conversations: conversations }));
+        }
+        return next();
+    });
+};
+/*
+ * GET newConversations API
+ */
+exports.newConversation = function (req, res, next) {
+    var userId = req.cookies['userId'];
+    var recipient = req.query.recipient;
+    if (!userId) {
+        res.status(422).send({ error: 'Please choose a valid userId for your conversation.' });
+        return next();
+    }
+    if (!recipient) {
+        res.status(422).send({ error: 'Please choose a valid recipient for your conversation.' });
+        return next();
+    }
+    // Conversation.find({conversationName: convName}, (err, existingConversation) => {
+    //   if(existingConversation.length){
+    //     console.log('Exiting conversation: ',existingConversation)
+    //     res.status(422).send({ error: 'Please choose a valid conversation name for your conversation.' });
+    //     return next();
+    //   } else{
+    //   }
+    // });
+    var conversation = new conversation_1.Conversation({
+        participants: [userId, recipient].sort()
+    });
+    conversation.save(function (err, newConversation) {
+        if (err) {
+            console.log(err);
+            res.send({ error: err });
+            return next(err);
+        }
+        conversation_1.Conversation.find({ participants: userId })
+            .exec(function (err, conversations) {
+            if (err) {
+                // console.log('eeeeeeeeeeeeeeeeeeee',err);
+                res.send({ error: err });
+                return next(err);
+            }
+            else {
+                // console.log('cccccccccccccccccccc',conversations);
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify({ conversations: conversations }));
+            }
         });
     });
 };
 /*
- * POST getConversations API
+ * GET fetchMessages API
  */
-exports.newConversation = function (req, res, next) {
-    console.log('rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr', req.headers['cookie']);
-    // if(!req.params.recipient) {
-    //   res.status(422).send({ error: 'Please choose a valid recipient for your message.' });
-    //   return next();
-    // }
-    // if(!req.body.composedMessage) {
-    //   res.status(422).send({ error: 'Please enter a message.' });
-    //   return next();
-    // }
-    // const conversation = new Conversation({
-    //   // participants: [req.user._id, req.params.recipient]
-    //   participants: [req.user._id, req.params.recipient]
+exports.fetchMessages = function (req, res, next) {
+    // let userId = req.cookies['userId'];
+    var conversationId = req.query.conversationId;
+    // conversationId = '5ac3b52b92260d1bf6b81d88';
+    console.log('conversationId', conversationId);
+    if (!conversationId) {
+        res.status(422).send({ error: 'Please choose a valid conversation Id for your messages.' });
+        return next();
+    }
+    // Set up empty array to hold conversations + most recent message
+    // let fullConversations: any = [];
+    // conversations.forEach(function(conversation) {
+    message_1.Message.find({ 'conversationId': conversationId })
+        .exec(function (err, messages) {
+        if (err) {
+            res.send({ error: err });
+            return next(err);
+        }
+        console.log('mesages===============>', messages);
+        // fullConversations.push(message);
+        // if(fullConversations.length === conversations.length) {
+        // console.log(fullConversations);
+        // return res.status(200).json({ conversations: fullConversations });
+        // }
+    });
     // });
-    // console.log(conversation);
-    // conversation.save(function(err, newConversation) {
-    //   if (err) {
-    //     res.send({ error: err });
-    //     return next(err);
-    //   }
-    //   const message = new Message({
-    //     conversationId: newConversation._id,
-    //     body: req.body.composedMessage,
-    //     author: req.user._id
-    //   });
-    //   message.save(function(err, newMessage) {
-    //     if (err) {
-    //       res.send({ error: err });
-    //       return next(err);
-    //     }
-    //     res.status(200).json({ message: 'Conversation started!', conversationId: conversation._id });
-    //     return next();
-    //   });
-    // });
+};
+/*
+ * GET fetchMessages API
+ */
+exports.saveMessage = function (req, res, next) {
+    var author = req.cookies['userId'];
+    var conversationId = req.query.conversationId;
+    var body = req.query.body;
+    console.log('conversationId', conversationId);
+    console.log('body', body);
+    console.log('author', author);
+    if (!conversationId) {
+        res.status(422).send({ error: 'There is not conversationId.' });
+        return next();
+    }
+    if (!body) {
+        res.status(422).send({ error: 'There is not body.' });
+        return next();
+    }
+    if (!author) {
+        res.status(422).send({ error: 'There is not author.' });
+        return next();
+    }
+    var message = new message_1.Message({
+        conversationId: conversationId,
+        body: body,
+        author: author
+    });
+    message.save(function (err, newMessage) {
+        if (err) {
+            res.send({ error: err });
+            return next(err);
+        }
+        console.log('newMessage=============>', newMessage);
+        // res.status(200).json({ message: 'Conversation started!', conversationId: conversation._id });
+        return next();
+    });
 };

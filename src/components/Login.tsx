@@ -20,9 +20,9 @@ class Login extends React.Component <{}, LoginState> {
     super(props);
 
     this.state = {
-      inputEmail: 'a@gmail.com',
+      inputEmail: 'e@gmail.com',
       inputEmailError: false,
-      inputPassword: '',
+      inputPassword: 'eee',
       inputPasswordError: false,
       loggedIn: false,
       loginFailed: false,

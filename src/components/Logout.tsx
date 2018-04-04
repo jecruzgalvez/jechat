@@ -5,12 +5,7 @@ import { Jumbotron } from 'react-bootstrap';
 class Logout extends React.Component {
 
   componentDidMount() {
-    axios.get('/api/fetchcontacts',{
-      params: {
-        email: 'd',
-        password: 2
-      }
-  })
+    axios.get('/api/logout',{})
   }
 
   render() {

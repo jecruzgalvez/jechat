@@ -48,22 +48,19 @@ db.once('open', function () {
     //     res.locals.admin = true;
     //   next();
     // });
-    app.use(function (req, res, next) {
-        // console.log('---client request cookies header:\n', req.headers['cookie']);
-        console.log('---client request cookies headxxxer:\n', req.cookies);
-        if (req.cookies.auth)
-            res.locals.authUser = true;
-        next();
-    });
+    // app.use(function (req: express.Request , res: express.Response, next: Function) {
+    //   if (req.cookies.auth )
+    //     res.locals.authUser = true;
+    //   next();
+    // })
     // Authorization Middleware
-    // var authorize = function(req: any, res: any, next: any) {
-    //   console.log('qqqqqqqqqqqqqqqqqqqqqq',req.locals)
-    //   console.log('cccccccccccccccccccccccccc:\n', req.cookies);
-    //   if (req.session.authUser)
-    //     return next();
-    //   else
-    //     return res.send(401);
-    // };
+    var auth = function (req, res, next) {
+        console.log('------Actual cookies --------:\n', req.cookies.auth);
+        // if (req.cookies.auth)
+        return next();
+        // else
+        // return res.send(401);
+    };
     if ('development' == app.get('env')) {
         app.use(errorHandler());
     }
@@ -71,12 +68,16 @@ db.once('open', function () {
     app.get('/', routes.index);
     // REST API routes 
     app.get('/api/test', routes.api.test);
+    app.get('/api/populate', routes.api.populate);
+    app.post('/registration', routes.api.registration);
     app.get('/api/login', routes.api.login);
     app.get('/api/logout', routes.api.logout);
-    app.post('/registration', routes.api.registration);
-    app.get('/api/populate', routes.api.populate);
-    app.get('/api/fetchContacts', routes.api.fetchContacts);
-    app.post('/api/newcConversation/:recipient', routes.api.newConversation);
+    app.get('/api/fetchFriends', auth, routes.api.fetchFriends);
+    app.get('/api/fetchContacts', auth, routes.api.fetchContacts);
+    app.get('/api/newConversation', auth, routes.api.newConversation);
+    app.get('/api/fetchConversations', auth, routes.api.fetchConversations);
+    app.get('/api/saveMessage', auth, routes.api.saveMessage);
+    app.get('/api/fetchMessages', auth, routes.api.fetchMessages);
     app.all('*', function (req, res) {
         res.status(404).send();
     });
