@@ -1,16 +1,35 @@
-const NEW_CONVERSATION       = 'conversation/NEW_CONVERSATION';
-// const NEW_CONVERSATION_ERROR = 'conversation/NEW_CONVERSATION_ERROR';
-const FETCH_CONVERSATIONS       = 'conversation/FETCH_CONVERSATION';
-// const FETCH_CONVERSATIONS_ERROR = 'conversation/FETCH_CONVERSATION_ERROR';
+import { NEW_CONVERSATION }     from '../actions/action_conv_newConversation';
+import { FETCH_CONVERSATIONS }  from '../actions/action_conv_fetchConversations';
+import { SELECT_CONVERSATION }  from '../actions/action_conv_selectConversation';
 
-export default function(state = [], action: {type: string, payload: {_id: string, userName: string}[]}) {
+const initialState = {
+  all: [],
+  currentConversation: ''  
+}
+
+
+export default function(state = initialState, action: any) {
+  // debugger
   switch (action.type) {
 
     case NEW_CONVERSATION:
-      return action.payload;
+      return {
+        ...state,
+        all: action.payload
+      }
       
     case FETCH_CONVERSATIONS:
-      return action.payload;
+      return {
+        ...state,
+        all: action.payload
+      }
+
+      case SELECT_CONVERSATION:
+      // debugger
+      return {
+        ...state,
+        currentConversation: action.currentConversation
+      }
 
       default:
       return state;

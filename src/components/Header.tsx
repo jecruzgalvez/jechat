@@ -1,14 +1,30 @@
 import * as React from 'react';
+import { connect } from "react-redux";
 
-const Header = () => {
+interface HeaderProps {
+  conversations: any;
+}
+
+class Header extends React.Component <HeaderProps, {}> {
+  constructor(props: HeaderProps){
+    super(props);
+  }
+  render() {
   return (
     <div>
       <h1>
-        JE Chat
+        JEChat: {this.props.conversations.currentConversation}
       </h1>
       <hr/>
     </div>    
   );
-};
+  }
+}
 
-export default Header;
+function mapStateToProps(state: any) {  
+  return {
+    conversations: state.conversations
+  };
+}
+
+export default connect(mapStateToProps)(Header);

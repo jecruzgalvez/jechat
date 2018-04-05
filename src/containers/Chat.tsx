@@ -3,18 +3,16 @@ import { connect } from "react-redux";
 // import axios from 'axios';
 import * as io from 'socket.io-client';
 import { Jumbotron, ListGroup, ListGroupItem } from 'react-bootstrap';
-import { saveMessage } from "../actions/index";
+import { saveMessage, fetchMessages } from "../actions/index";
 
 var socket: SocketIOClient.Socket;
 
 interface ChatProps {
-  // friends: {_id: string, firstName: string}[];
-  // conversations: {_id: string, participants: string[]}[];
-  conversations: {_id: string, participants: string[]}[];
+  conversations: any;
   messages: any;
   saveMessage: (conversationId: any, body: any) => void;
+  fetchMessages: (conversationId: any) => void;
 }
-
 
 interface ChatState {
   response: string;
@@ -35,7 +33,7 @@ class Chat extends React.Component <ChatProps, ChatState> {
       endpoint: 'http://127.0.0.1:3001',
       inputText: ''
     };
-    this.handleSend = this.handleSend.bind(this);
+    // this.handleSend = this.handleSend.bind(this);
     this.handleSend2 = this.handleSend2.bind(this);
     this.handleInputText = this.handleInputText.bind(this);
   }
@@ -48,16 +46,18 @@ class Chat extends React.Component <ChatProps, ChatState> {
     });
   }
 
-  handleSend(event: React.MouseEvent <HTMLInputElement>) {
-    event.preventDefault();
-    socket.emit('chat message', this.state.inputText);
-    this.setState({inputText: ''});
-  }
+  // handleSend(event: React.MouseEvent <HTMLInputElement>) {
+  //   event.preventDefault();
+  //   socket.emit('chat message', this.state.inputText);
+  //   this.setState({inputText: ''});
+  // }
 
   handleSend2(event: React.MouseEvent <HTMLInputElement>) {
     event.preventDefault();
-    this.setState({inputText: ''});    
-    this.props.saveMessage('5ac51af267ef0227d8543e55', this.state.inputText);
+    this.setState({inputText: ''});
+    // debugger
+    this.props.saveMessage(this.props.conversations.currentConversation, this.state.inputText);
+    this.props.fetchMessages(this.props.conversations.currentConversation);
   }
 
   handleInputText(event: React.ChangeEvent <HTMLInputElement>) {
@@ -120,7 +120,8 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
   return {
     // fetchConversations: () => dispatch(fetchConversations()),
-    saveMessage: (conversationId: any, body: any) => dispatch(saveMessage(conversationId, body))
+    saveMessage: (conversationId: any, body: any) => dispatch(saveMessage(conversationId, body)),
+    fetchMessages: (conversationId: string) => dispatch(fetchMessages(conversationId))
   }
 }
 

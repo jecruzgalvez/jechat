@@ -1,12 +1,14 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
-import { fetchConversations, fetchMessages } from "../actions/index";
+
+import { fetchConversations, selectConversation, fetchMessages } from "../actions/index";
 
 interface ConversationsProps {
   friends: {_id: string, firstName: string}[];
-  conversations: {_id: string, participants: string[]}[];
+  conversations: any;
   fetchConversations: () => void;
+  selectConversation: (currentConverstion: any) => void;
   fetchMessages: (conversationId: any) => void;
 }
 
@@ -16,18 +18,20 @@ class Conversations extends React.Component <ConversationsProps, {}> {
     this.handleClickListGroup = this.handleClickListGroup.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchConversations();
     // debugger
   }
 
   handleClickListGroup(event: React.MouseEvent <ListGroupItem & HTMLLIElement>) {
-    console.log(event.currentTarget.dataset.id);
-    this.props.fetchMessages(event.currentTarget.dataset.id)
+    this.props.fetchMessages(event.currentTarget.dataset.id);
+    this.props.selectConversation(event.currentTarget.dataset.id);
+    // debugger
   }
 
   renderList() {
-    return this.props.conversations.map((conv ) => {
+    // debugger
+    return this.props.conversations.all.map((conv :any) => {
       // let participants = conv.participants.map( (participant) => {
       //   return '*****' + participant ;
       // })
@@ -50,6 +54,7 @@ class Conversations extends React.Component <ConversationsProps, {}> {
 }
 
 function mapStateToProps(state: any) {  
+  // debugger
   return {
     friends: state.friends,
     conversations: state.conversations
@@ -58,6 +63,7 @@ function mapStateToProps(state: any) {
 function mapDispatchToProps(dispatch: any) {
   return {
     fetchConversations: () => dispatch(fetchConversations()),
+    selectConversation: (currentConverstion: string) => dispatch(selectConversation(currentConverstion)),
     fetchMessages: (conversationId: any) => dispatch(fetchMessages(conversationId))
   }
 }

@@ -55,7 +55,7 @@ db.once('open', function () {
     // })
     // Authorization Middleware
     var auth = function (req, res, next) {
-        console.log('------Actual cookies --------:\n', req.cookies.auth);
+        // console.log('------Actual cookies --------:\n', req.cookies.auth);
         // if (req.cookies.auth)
         return next();
         // else
@@ -64,38 +64,36 @@ db.once('open', function () {
     if ('development' == app.get('env')) {
         app.use(errorHandler());
     }
-    // Pages and routes
+    // Routes
     app.get('/', routes.index);
-    // REST API routes 
-    app.get('/api/test', routes.api.test);
-    app.get('/api/populate', routes.api.populate);
-    app.post('/registration', routes.api.registration);
-    app.get('/api/login', routes.api.login);
-    app.get('/api/logout', routes.api.logout);
-    app.get('/api/fetchFriends', auth, routes.api.fetchFriends);
-    app.get('/api/fetchContacts', auth, routes.api.fetchContacts);
-    app.get('/api/newConversation', auth, routes.api.newConversation);
-    app.get('/api/fetchConversations', auth, routes.api.fetchConversations);
-    app.get('/api/saveMessage', auth, routes.api.saveMessage);
-    app.get('/api/fetchMessages', auth, routes.api.fetchMessages);
+    app.get('/api/populate', routes.populate);
+    app.post('/registration', routes.registration);
+    app.get('/api/login', routes.login);
+    app.get('/api/logout', routes.logout);
+    app.get('/api/fetchFriends', auth, routes.fetchFriends);
+    app.get('/api/fetchContacts', auth, routes.fetchContacts);
+    app.get('/api/newConversation', auth, routes.newConversation);
+    app.get('/api/fetchConversations', auth, routes.fetchConversations);
+    app.get('/api/saveMessage', auth, routes.saveMessage);
+    app.get('/api/fetchMessages', auth, routes.fetchMessages);
     app.all('*', function (req, res) {
         res.status(404).send();
     });
     var server = http.createServer(app);
     var io = socketio(server);
     io.on('connection', function (socket) {
-        console.log('a user connected');
+        // console.log('a user connected');
         socket.on('disconnect', function () {
-            console.log('user disconnected');
+            // console.log('user disconnected');
         });
         socket.on('chat message', function (msg) {
-            console.log(msg);
+            // console.log(msg);
             io.emit('chat message', { response: msg });
         });
     });
     var boot = function () {
         server.listen(app.get('port'), function () {
-            console.info("Express server listening on port " + app.get('port'));
+            // console.info(`Express server listening on port ${app.get('port')}`);
         });
     };
     var shutdown = function () {

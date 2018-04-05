@@ -1,25 +1,24 @@
 import * as React from 'react';
 import { connect } from "react-redux";
 import { Modal, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
+
 import { fetchFriends, newConversation } from "../actions/index";
 
 interface OneToOneProps {
-  handleToggleModalOneToOne: () => void;
   friends: {_id: string, firstName: string}[];
-  fetchContacts: any;
+  fetchFriends: () => void;
+  handleToggleModalOneToOne: () => void;
   newConversation: any;
 }
 
 class OneToOne extends React.Component <OneToOneProps, {}> {
   constructor(props: OneToOneProps) {
     super(props);
-
     this.handleClickListGroup = this.handleClickListGroup.bind(this);
   }
 
-
   componentDidMount() {
-    this.props.fetchContacts();
+    this.props.fetchFriends();
   }
 
   handleClickListGroup(event: React.MouseEvent <ListGroupItem & HTMLLIElement>) {
@@ -76,12 +75,8 @@ function mapStateToProps(state: any) {
 }
 
 function mapDispatchToProps(dispatch: any) {
-// Whenever a function is called, the result shoudl be passed to all of our reducers
-  // return bindActionCreators({
-  //   fetchContactsList: fetchContactsList
-  // }, dispatch);
   return {
-    fetchContacts: () => dispatch(fetchFriends()),
+    fetchFriends: () => dispatch(fetchFriends()),
     newConversation: (recipient: any) => dispatch(newConversation(recipient))
   }  
 }

@@ -1,8 +1,5 @@
-const SAVE_MESSAGE       = 'messages/SAVE_MESSAGE';
-// const SAVE_MESSAGE_ERROR = 'messages/SAVE_MESSAGE_ERROR';
-
-const FETCH_MESSAGES       = 'messages/FETCH_MESSAGES';
-// const FETCH_MESSAGES_ERROR = 'messages/FETCH_MESSAGES_ERROR';
+import { SAVE_MESSAGE }   from '../actions/action_mess_saveMessage';
+import { FETCH_MESSAGES } from '../actions/action_mess_fetchMessages';
 
 export default function(state = [], action: any) {
   switch (action.type) {

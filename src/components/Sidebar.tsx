@@ -1,12 +1,10 @@
 import * as React from 'react';
-// import { Redirect } from 'react-router';
+import { Button, ButtonGroup, Jumbotron } from 'react-bootstrap';
 
-import OneToOne from './OneToOne';
+import OneToOne from '../containers/OneToOne';
 import NewGroup from './NewGroup';
 import ContactsOrder from './ContactsOrder';
 import Conversations from '../containers/Conversations';
-
-import { Button, ButtonGroup, Jumbotron } from 'react-bootstrap';
 
 interface SidebarSatate {
   showModalOneToOne: boolean;

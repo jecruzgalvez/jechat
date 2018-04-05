@@ -1,11 +1,25 @@
 "use strict";
 exports.__esModule = true;
-var api = require("./api");
-exports.api = api;
-/*
- * GET home page.
- */
-var index = function (req, res, next) {
+var users_populate_1 = require("./users_populate");
+exports.populate = users_populate_1.populate;
+var users_fetchFriends_1 = require("./users_fetchFriends");
+exports.fetchFriends = users_fetchFriends_1.fetchFriends;
+var users_fetchContacts_1 = require("./users_fetchContacts");
+exports.fetchContacts = users_fetchContacts_1.fetchContacts;
+var users_login_1 = require("./users_login");
+exports.login = users_login_1.login;
+var users_logout_1 = require("./users_logout");
+exports.logout = users_logout_1.logout;
+var users_registration_1 = require("./users_registration");
+exports.registration = users_registration_1.registration;
+var conversations_newConversation_1 = require("./conversations_newConversation");
+exports.newConversation = conversations_newConversation_1.newConversation;
+var conversations_fetchConversations_1 = require("./conversations_fetchConversations");
+exports.fetchConversations = conversations_fetchConversations_1.fetchConversations;
+var messages_fetchMessages_1 = require("./messages_fetchMessages");
+exports.fetchMessages = messages_fetchMessages_1.fetchMessages;
+var messages_saveMessage_1 = require("./messages_saveMessage");
+exports.saveMessage = messages_saveMessage_1.saveMessage;
+exports.index = function (req, res, next) {
     next();
 };
-exports.index = index;
