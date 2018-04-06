@@ -11,7 +11,6 @@ exports.fetchConversations = function (req, res, next) {
         return next();
     }
     conversation_1.Conversation.find({ participants: userId })
-        .select('_id')
         .exec(function (err, conversations) {
         if (err) {
             res.send({ error: err });

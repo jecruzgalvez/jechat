@@ -1,6 +1,9 @@
 import * as mongoose from 'mongoose';
 
-import {ROLE_ADMIN, ROLE_CLIENT, ROLE_MEMBER, ROLE_OWNER } from '../constants/roles';
+export const ROLE_MEMBER = 'Member';
+export const ROLE_CLIENT = 'Client';
+export const ROLE_OWNER = 'Owner';
+export const ROLE_ADMIN = 'Admin';
 
 // User schema
 let Schema = mongoose.Schema,

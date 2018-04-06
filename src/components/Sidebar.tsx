@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Button, ButtonGroup, Jumbotron } from 'react-bootstrap';
 
-import OneToOne from '../containers/OneToOne';
-import NewGroup from './NewGroup';
-import ContactsOrder from './ContactsOrder';
+import OneToOne      from '../containers/OneToOne';
+import NewGroup      from '../containers/NewGroup';
 import Conversations from '../containers/Conversations';
+
+// import ContactsOrder from './ContactsOrder';
 
 interface SidebarSatate {
   showModalOneToOne: boolean;
@@ -47,7 +48,7 @@ class Sidebar extends React.Component <{}, SidebarSatate> {
         {this.state.showModalOneToOne ? <OneToOne handleToggleModalOneToOne ={this.handleToggleModalOneToOne} /> : <div /> }        
         {this.state.showModalNewGroup ? <NewGroup handleToggleModalNewGroup={this.handleToggleModalNewGroup} /> : <div /> }
 
-        <ContactsOrder />
+        {/* <ContactsOrder /> */}
         <Conversations />
 
       </Jumbotron>

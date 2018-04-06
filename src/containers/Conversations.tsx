@@ -6,9 +6,9 @@ import { fetchConversations, selectConversation, fetchMessages } from "../action
 
 interface ConversationsProps {
   friends: {_id: string, firstName: string}[];
-  conversations: any;
+  allConversations: any;
   fetchConversations: () => void;
-  selectConversation: (currentConverstion: any) => void;
+  selectConversation: (currentConversation: any) => void;
   fetchMessages: (conversationId: any) => void;
 }
 
@@ -30,21 +30,21 @@ class Conversations extends React.Component <ConversationsProps, {}> {
   }
 
   renderList() {
-    // debugger
-    return this.props.conversations.all.map((conv :any) => {
-      // let participants = conv.participants.map( (participant) => {
-      //   return '*****' + participant ;
-      // })
+    return this.props.allConversations.map((conv: any ) => {
+      let participants = conv.participants.map( (name: string) => {
+        return name + '  ';
+      })
       return (
         <ListGroupItem key={conv._id} onClick={this.handleClickListGroup} data-id={conv._id}>
-          {conv._id}
-          {/* {participants} */}
+          {/* {conv._id} */}
+          {participants}
         </ListGroupItem>        
       );
     });
   }
 
   render() {
+    // debugger
     return (
       <ListGroup>
           {this.renderList()}
@@ -57,13 +57,13 @@ function mapStateToProps(state: any) {
   // debugger
   return {
     friends: state.friends,
-    conversations: state.conversations
+    allConversations: state.conversations.all
   };
 }
 function mapDispatchToProps(dispatch: any) {
   return {
     fetchConversations: () => dispatch(fetchConversations()),
-    selectConversation: (currentConverstion: string) => dispatch(selectConversation(currentConverstion)),
+    selectConversation: (currentConversation: string) => dispatch(selectConversation(currentConversation)),
     fetchMessages: (conversationId: any) => dispatch(fetchMessages(conversationId))
   }
 }

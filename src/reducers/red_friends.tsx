@@ -1,4 +1,4 @@
-import { FETCH_FRIENDS } from '../actions/action_users_fetchFriends';
+import { FETCH_FRIENDS } from '../actions/act_users_fetchFriends';
 
 export default function(state = [], action: {type: string, payload: {_id: string, userName: string}[]}) {  
   // debugger
