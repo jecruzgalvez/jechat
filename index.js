@@ -4,7 +4,7 @@ var express = require("express");
 var http = require("http");
 var path = require("path");
 var mongoose = require("mongoose");
-var socketio = require("socket.io");
+var socketIO = require("socket.io");
 var cookieParser = require("cookie-parser");
 // import * as expressSession from 'express-session';
 var logger = require("morgan");
@@ -67,11 +67,11 @@ db.once('open', function () {
     // Routes
     app.get('/', routes.index);
     app.get('/api/populate', routes.populate);
-    app.post('/registration', routes.registration);
+    app.get('/api/registration', routes.registration);
     app.get('/api/login', routes.login);
     app.get('/api/logout', routes.logout);
+    app.get('/api/fetchUsers', auth, routes.fetchUsers);
     app.get('/api/fetchFriends', auth, routes.fetchFriends);
-    app.get('/api/fetchContacts', auth, routes.fetchContacts);
     app.get('/api/newConversation', auth, routes.newConversation);
     app.get('/api/fetchConversations', auth, routes.fetchConversations);
     app.get('/api/saveMessage', auth, routes.saveMessage);
@@ -80,17 +80,39 @@ db.once('open', function () {
         res.status(404).send();
     });
     var server = http.createServer(app);
-    var io = socketio(server);
+    // Creating our socket using the instance of the server
+    var io = socketIO(server);
+    // Set socket.io listeners.
     io.on('connection', function (socket) {
-        // console.log('a user connected');
-        socket.on('disconnect', function () {
-            // console.log('user disconnected');
+        console.log('a user connected');
+        // On conversation entry, join broadcast channel
+        socket.on('enter conversation', function (conversation) {
+            socket.join(conversation);
+            // console.log('joined ' + conversation);
         });
-        socket.on('chat message', function (msg) {
-            // console.log(msg);
-            io.emit('chat message', { response: msg });
+        socket.on('leave conversation', function (conversation) {
+            socket.leave(conversation);
+            // console.log('left ' + conversation);
+        });
+        socket.on('new message', function (conversationId, message) {
+            console.log('qqqqqqq', conversationId, message);
+            io.emit('new message', message);
+            // io.sockets.in(conversation).emit('refresh messages', conversation);
+        });
+        socket.on('disconnect', function () {
+            console.log('user disconnected');
         });
     });
+    // io.on('connection', function(socket) {
+    //   // console.log('a user connected');
+    //   socket.on('disconnect', function() {
+    //     // console.log('user disconnected');
+    //   });
+    //   socket.on('chat message', function(msg) {
+    //     // console.log(msg);
+    //     io.emit('chat message', {response: msg});
+    //   });
+    // });
     var boot = function () {
         server.listen(app.get('port'), function () {
             // console.info(`Express server listening on port ${app.get('port')}`);

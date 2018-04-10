@@ -1,15 +1,17 @@
 import * as React from "react";
 import { connect } from "react-redux";
-// import axios from 'axios';
-import * as io from 'socket.io-client';
-import { Jumbotron, ListGroup, ListGroupItem } from 'react-bootstrap';
-import { saveMessage, fetchMessages } from "../actions/index";
+import * as socketIoClient from 'socket.io-client';
+import { Jumbotron, ListGroup, ListGroupItem, Button } from 'react-bootstrap';
+import { fetchUsers,  saveMessage, fetchMessages } from "../actions/index";
 
-var socket: SocketIOClient.Socket;
+// var userNames: any;
 
 interface ChatProps {
-  conversations: any;
-  messages: any;
+  allConversations: any;
+  currentConversation: string;
+  messages: any;  
+  users: any;
+  fetchUsers: () => void;
   saveMessage: (conversationId: any, body: any) => void;
   fetchMessages: (conversationId: any) => void;
 }
@@ -21,10 +23,6 @@ interface ChatState {
 }
 // bitbucket
 
-interface DataResponse {
-  response: string;
-}
-
 class Chat extends React.Component <ChatProps, ChatState> {
   constructor(props: ChatProps) {
     super(props);
@@ -33,46 +31,66 @@ class Chat extends React.Component <ChatProps, ChatState> {
       endpoint: 'http://127.0.0.1:3001',
       inputText: ''
     };
-    // this.handleSend = this.handleSend.bind(this);
-    this.handleSend2 = this.handleSend2.bind(this);
+    this.handleSend = this.handleSend.bind(this);    
+    // this.handleSendSubmit = this.handleSendSubmit.bind(this);
+    // this.handleSendClick = this.handleSendClick.bind(this);    
+
     this.handleInputText = this.handleInputText.bind(this);
-  }
+    this.showParticipants = this.showParticipants.bind(this);
+  } 
   
   componentDidMount() {
-    socket = io(this.state.endpoint);
-    
-    socket.on('chat message', (data: DataResponse) => {
-      this.setState({ response : this.state.response + '     ' + data.response });
+    // this.props.fetchUsers();
+    // userNames = new Map();
+    // this.props.users.map( (user: any) => {
+    //   // debugger
+    //   userNames.set( hola, 'sssssaaaaa');
+    // })
+
+    const  socket: SocketIOClient.Socket = socketIoClient(this.state.endpoint);
+    socket.on('new message', () => {
+      this.props.fetchMessages(this.props.currentConversation);
     });
   }
 
-  // handleSend(event: React.MouseEvent <HTMLInputElement>) {
-  //   event.preventDefault();
-  //   socket.emit('chat message', this.state.inputText);
-  //   this.setState({inputText: ''});
-  // }
 
-  handleSend2(event: React.MouseEvent <HTMLInputElement>) {
+  handleSend(event: any) {
+    const  socket: SocketIOClient.Socket = socketIoClient(this.state.endpoint);
+
     event.preventDefault();
+    socket.emit('new message', this.props.currentConversation, this.state.inputText);
+    this.props.saveMessage(this.props.currentConversation, this.state.inputText);
+
     this.setState({inputText: ''});
-    // debugger
-    this.props.saveMessage(this.props.conversations.currentConversation, this.state.inputText);
-    this.props.fetchMessages(this.props.conversations.currentConversation);
   }
+  // handleSendSubmit(event: React.FormEvent <HTMLFormElement>) {
+  //   this.handleSend(event);
+  // }
+  // handleSendClick(event: React.MouseEvent <FormControl & HTMLInputElement>) {    
+  //   this.handleSend(event);
+  // }
 
   handleInputText(event: React.ChangeEvent <HTMLInputElement>) {
     this.setState({inputText: event.target.value});    
   }
 
+  showParticipants() {
+    return this.props.allConversations.map((conv: any ) => {
+      let participants
+      if(conv._id == this.props.currentConversation) {
+        participants = conv.participants.map( (name: string) => {
+          return name + '  ';
+        });
+      }      
+      return participants;
+    });    
+  }
+
   renderList() {
     return this.props.messages.map((message: any) => {
-      // let participants = conv.participants.map( (participant) => {
-      //   return '*****' + participant ;
-      // })
       return (
         <ListGroupItem key={message._id}>
           {message.body}
-          {/* {participants} */}
         </ListGroupItem>        
       );
     });
@@ -80,46 +98,52 @@ class Chat extends React.Component <ChatProps, ChatState> {
 
   render() {
     return (
-      <Jumbotron className="w-100 h-100">
-        Participants: Contact 1, Contact2
-        <form>          
-          <div>
-            {/* <textarea
-              cols={30}
-              rows={10}
-              value={this.state.response}
-            />             */}
-            <ListGroup>
-              {this.renderList()}
-            </ListGroup>
+      <div>
+        { this.props.currentConversation?
+          <Jumbotron className="w-100 h-100">
+            <h3>{this.showParticipants()}</h3>
+            
+            <form onSubmit={this.handleSend}>
+                <div>
+                  <ListGroup>
+                    {this.renderList()}
+                  </ListGroup>
 
-          </div>
-          <br/>
-          <input
-            type="text"
-            value={this.state.inputText}
-            onChange={this.handleInputText}
-          />
-          <button
-            onClick={this.handleSend2}
-          >
-            Send
-          </button>
-        </form>
-      </Jumbotron>
+                </div>
+                <br/>
+                <input
+                  type="text"
+                  value={this.state.inputText}
+                  onChange={this.handleInputText}
+                />
+                <Button
+                  onClick={this.handleSend}
+                >
+                  Send
+                </Button>
+            </form>
+          </Jumbotron>
+        :
+          <div>Please select a conversation.</div>
+      }
+      </div>
+     
     );
   }
 }
 
-function mapStateToProps(state: any) {  
+function mapStateToProps(state: any) { 
+  // debugger
   return {
-    conversations: state.conversations,
+    users: state.users,
+    allConversations: state.conversations.all,
+    currentConversation: state.conversations.currentConversation,
     messages: state.messages
   };
 }
 function mapDispatchToProps(dispatch: any) {
   return {
-    // fetchConversations: () => dispatch(fetchConversations()),
+    fetchUsers: () => dispatch(fetchUsers()),
     saveMessage: (conversationId: any, body: any) => dispatch(saveMessage(conversationId, body)),
     fetchMessages: (conversationId: string) => dispatch(fetchMessages(conversationId))
   }

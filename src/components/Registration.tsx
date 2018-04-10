@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Redirect } from 'react-router';
-
-import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import { Alert, Button, Jumbotron, Form, FormGroup, FormControl, Col, HelpBlock } from 'react-bootstrap';
+import axios from 'axios';
+
 
 interface RegisterState {
-  inputUserName: string;
-  inputUserNameError: boolean;
+  inputFirstName: string;
+  inputFirstNameError: boolean;
   inputEmail: string;
   inputEmailError: boolean;
   inputPassword: string;
@@ -22,8 +22,8 @@ class Registration extends React.Component <{}, RegisterState> {
     super(props);
     
     this.state = {
-      inputUserName: '',
-      inputUserNameError: false,
+      inputFirstName: '',
+      inputFirstNameError: false,
       inputEmail: 'a@gmail.com',
       inputEmailError: false,
       inputPassword: '',
@@ -34,9 +34,9 @@ class Registration extends React.Component <{}, RegisterState> {
       existingUser: false
     };
     
-    this.handleInputUserName = this.handleInputUserName.bind(this);
-    this.validateInputUserName = this.validateInputUserName.bind(this);   
-    this.userNameGetValidationState = this.userNameGetValidationState.bind(this);
+    this.handleInputFirstName = this.handleInputFirstName.bind(this);
+    this.validateInputFirstName = this.validateInputFirstName.bind(this);   
+    this.firstNameGetValidationState = this.firstNameGetValidationState.bind(this);
 
     this.handleInputEmail = this.handleInputEmail.bind(this);
     this.validateInputEmail = this.validateInputEmail.bind(this);
@@ -55,25 +55,25 @@ class Registration extends React.Component <{}, RegisterState> {
     this.handleSubmit = this.handleSubmit.bind(this);    
   }
 
-  handleInputUserName(event: React.ChangeEvent <FormControl & HTMLInputElement>) {
-    this.setState( {inputUserName: event.target.value});    
+  handleInputFirstName(event: React.ChangeEvent <FormControl & HTMLInputElement>) {
+    this.setState( {inputFirstName: event.target.value});    
   }
-  validateInputUserName() {
-    // let userNameRegularExpression = /^[a-z ,.'-]+$/i;
-    // if ( ! userNameRegularExpression.test(this.state.inputUserName) ) {
-    //   this.setState({ inputUserNameError: true });
+  validateInputFirstName() {
+    // let firstNameRegularExpression = /^[a-z ,.'-]+$/i;
+    // if ( ! firstNameRegularExpression.test(this.state.inputFirstName) ) {
+    //   this.setState({ inputFirstNameError: true });
     // } else {
-    //   this.setState({ inputUserNameError: false });
+    //   this.setState({ inputFirstNameError: false });
     // }
 
-    if ( this.state.inputUserName.length === 0 ) {
-      this.setState({ inputUserNameError: true });
+    if ( this.state.inputFirstName.length === 0 ) {
+      this.setState({ inputFirstNameError: true });
     } else {
-      this.setState({ inputUserNameError: false });
+      this.setState({ inputFirstNameError: false });
     }   
   }
-  userNameGetValidationState() {
-    if ( this.state.inputUserNameError ) {
+  firstNameGetValidationState() {
+    if ( this.state.inputFirstNameError ) {
       return 'error';
     }
     return null;
@@ -132,7 +132,7 @@ class Registration extends React.Component <{}, RegisterState> {
   }
 
   handleSubmit(event: React.MouseEvent <FormControl & HTMLInputElement>) {
-    if ( this.state.inputUserNameError ||
+    if ( this.state.inputFirstNameError ||
          this.state.inputEmailError ||
          this.state.inputPasswordError ||
          this.state.inputPasswordConfirmationError ||
@@ -142,32 +142,22 @@ class Registration extends React.Component <{}, RegisterState> {
         ) {
             // console.log('Cant continue with form errors');
     } else {
-
-      let url = '/registration';
-      let data = {
-        userName: this.state.inputUserName,
-        email: this.state.inputEmail,
-        password: this.state.inputPassword
-      };
-
-      fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
+      axios.get('/api/registration', {
+        params: {
+          firstName: this.state.inputFirstName,
+          email: this.state.inputEmail,
+          password: this.state.inputPassword
+        }
       })
-      .then(res => res.json())
       .catch(error => console.error('Error:', error))
-      .then(res => {
-        if (res.response === 'success') {
-          // console.log("SUCCESS ", res.existingEmail);
+      .then(
+        (success: any ) => {
+        if (success.data['response'] === 'success') {
+          console.log(success)
           this.setState({registerSuccessful: true});
         } else {
-          // console.log('FAIL ', res.existingEmail);
           this.setState({existingUser: true});
-
-        }
+       }
       });
     }  
     event.preventDefault();
@@ -175,7 +165,7 @@ class Registration extends React.Component <{}, RegisterState> {
 
   handleTryAgain() {
     this.setState({
-      inputUserName: '',
+      inputFirstName: '',
       inputEmail: 'a@gmail.com',
       inputPassword: '',
       inputPasswordConfirmation: '',
@@ -212,23 +202,23 @@ class Registration extends React.Component <{}, RegisterState> {
         <Form horizontal={true} >
 
           <FormGroup
-            controlId="formHorizontalUserName"
-            validationState={this.userNameGetValidationState()}
+            controlId="formHorizontalFirstName"
+            validationState={this.firstNameGetValidationState()}
           >
             <Col  sm={2}>
-              User name
+              First name
             </Col>
             <Col sm={4}>
               <FormControl
                   type="text"
-                  value={this.state.inputUserName}
-                  placeholder="Your real name"
-                  onChange={this.handleInputUserName}
-                  onBlur={this.validateInputUserName}
+                  value={this.state.inputFirstName}
+                  placeholder="Your first name"
+                  onChange={this.handleInputFirstName}
+                  onBlur={this.validateInputFirstName}
               />
             </Col>
             <Col sm={6}>
-              {this.state.inputUserNameError ?
+              {this.state.inputFirstNameError ?
                   <HelpBlock>User name can not be empty.</HelpBlock>
                   :
                   <HelpBlock />

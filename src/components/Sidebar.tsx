@@ -42,7 +42,7 @@ class Sidebar extends React.Component <{}, SidebarSatate> {
       <Jumbotron className="w-100 h-100">
       
         <ButtonGroup>
-          <Button bsStyle="primary" onClick={this.handleToggleModalOneToOne}> One to One </Button>
+          <Button bsStyle="primary" onClick={this.handleToggleModalOneToOne}> Contacts </Button>
           <Button bsStyle="primary" onClick={this.handleToggleModalNewGroup}> New group </Button>
         </ButtonGroup>
         {this.state.showModalOneToOne ? <OneToOne handleToggleModalOneToOne ={this.handleToggleModalOneToOne} /> : <div /> }        

@@ -22,7 +22,6 @@ export const fetchConversations = (req: express.Request , res: express.Response,
     }
     else {     
       // console.log('conversations',conversations);
-
       interface convsI {
           participants: string[],
           _id: ''

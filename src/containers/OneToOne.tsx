@@ -32,7 +32,7 @@ class OneToOne extends React.Component <OneToOneProps, {}> {
     return this.props.friends.map((friend ) => {
       return (
         <ListGroupItem key={friend._id} onClick={this.handleClickListGroup} data-id={friend._id} data-firstname={friend.firstName} >
-          {friend.firstName} ---- {friend._id}
+          {friend.firstName}
         </ListGroupItem>        
       );
     });
@@ -44,7 +44,7 @@ class OneToOne extends React.Component <OneToOneProps, {}> {
         <Modal.Dialog>
 
           <Modal.Header>
-            <Modal.Title>Click on a user to add to your friends list.</Modal.Title>
+            <Modal.Title>Click on a contact to open one to one conversation.</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

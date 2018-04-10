@@ -8,14 +8,14 @@ var user_1 = require("../models/user");
 exports.populate = function (req, res, next) {
     var a = new user_1.User({
         _id: new mongoose.Types.ObjectId(),
-        firstName: 'a',
+        firstName: 'Angel',
         email: 'a@gmail.com',
         password: 'aaa'
     });
     a.save();
     var b = new user_1.User({
         _id: new mongoose.Types.ObjectId(),
-        firstName: 'b',
+        firstName: 'Berenice',
         email: 'b@gmail.com',
         password: 'bbb',
         friends: a._id
@@ -23,7 +23,7 @@ exports.populate = function (req, res, next) {
     b.save();
     var c = new user_1.User({
         _id: new mongoose.Types.ObjectId(),
-        firstName: 'c',
+        firstName: 'Carlos',
         email: 'c@gmail.com',
         password: 'ccc',
         friends: [a._id, b._id]
@@ -31,7 +31,7 @@ exports.populate = function (req, res, next) {
     c.save();
     var d = new user_1.User({
         _id: new mongoose.Types.ObjectId(),
-        firstName: 'd',
+        firstName: 'David',
         email: 'd@gmail.com',
         password: 'ddd',
         friends: [a._id, b._id, c._id]
@@ -39,7 +39,7 @@ exports.populate = function (req, res, next) {
     d.save();
     var e = new user_1.User({
         _id: new mongoose.Types.ObjectId(),
-        firstName: 'e',
+        firstName: 'Elpidio',
         email: 'e@gmail.com',
         password: 'eee',
         friends: [a._id, b._id, c._id, d._id]

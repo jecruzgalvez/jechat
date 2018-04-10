@@ -10,9 +10,9 @@ export const saveMessage = (req: express.Request , res: express.Response, next: 
   let conversationId = req.query.conversationId;
   let body = req.query.body;
 
-  console.log('conversationId', conversationId);
-  console.log('body', body);
-  console.log('author', author);
+  // console.log('conversationId', conversationId);
+  // console.log('body', body);
+  // console.log('author', author);
 
   if(!conversationId) {
     res.status(422).send({ error: 'There is not conversationId.' });
@@ -47,7 +47,7 @@ export const saveMessage = (req: express.Request , res: express.Response, next: 
           return next(err);
         }
         else {                  
-          console.log('mesages===============>',messages);
+          // console.log('mesages===============>',messages);
           res.setHeader('Content-Type', 'application/json');
           res.send(JSON.stringify({ messages }));
         }

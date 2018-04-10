@@ -9,7 +9,7 @@ import { User } from '../models/user';
 export const populate = (req: express.Request , res: express.Response, next: Function) => {
   var a = new User ({
     _id: new mongoose.Types.ObjectId(),
-    firstName: 'a',
+    firstName: 'Angel',
     email: 'a@gmail.com',
     password: 'aaa'
   });
@@ -17,7 +17,7 @@ export const populate = (req: express.Request , res: express.Response, next: Fun
 
   var b = new User ({
     _id: new mongoose.Types.ObjectId(),
-    firstName: 'b',
+    firstName: 'Berenice',
     email: 'b@gmail.com',
     password: 'bbb',
     friends: a._id
@@ -26,7 +26,7 @@ export const populate = (req: express.Request , res: express.Response, next: Fun
 
   var c = new User ({
     _id: new mongoose.Types.ObjectId(),
-    firstName: 'c',
+    firstName: 'Carlos',
     email: 'c@gmail.com',
     password: 'ccc',
     friends: [a._id, b._id]
@@ -35,7 +35,7 @@ export const populate = (req: express.Request , res: express.Response, next: Fun
 
   var d = new User ({
     _id: new mongoose.Types.ObjectId(),
-    firstName: 'd',
+    firstName: 'David',
     email: 'd@gmail.com',
     password: 'ddd',
     friends: [a._id, b._id, c._id]
@@ -44,7 +44,7 @@ export const populate = (req: express.Request , res: express.Response, next: Fun
 
   var e = new User ({
     _id: new mongoose.Types.ObjectId(),
-    firstName: 'e',
+    firstName: 'Elpidio',
     email: 'e@gmail.com',
     password: 'eee',
     friends: [a._id, b._id, c._id, d._id ]

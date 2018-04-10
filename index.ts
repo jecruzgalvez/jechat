@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as http from 'http';
 import * as path from 'path';
 import * as mongoose from 'mongoose';
-import * as socketio from 'socket.io';
+import * as socketIO from 'socket.io';
 import * as cookieParser from 'cookie-parser';
 // import * as expressSession from 'express-session';
 import * as logger from 'morgan';
@@ -79,12 +79,12 @@ db.once('open', function() {
 
   app.get('/api/populate',                 routes.populate);
 
-  app.post('/registration',                routes.registration);
+  app.get('/api/registration',             routes.registration);
   app.get('/api/login',                    routes.login);
   app.get('/api/logout',                   routes.logout);
 
+  app.get('/api/fetchUsers',       auth, routes.fetchUsers);
   app.get('/api/fetchFriends',       auth, routes.fetchFriends);
-  app.get('/api/fetchContacts',      auth, routes.fetchContacts);
 
   app.get('/api/newConversation',    auth, routes.newConversation);
   app.get('/api/fetchConversations', auth, routes.fetchConversations);
@@ -97,21 +97,48 @@ db.once('open', function() {
   });
 
   const server = http.createServer(app);
-  const io = socketio(server);
 
-  io.on('connection', function(socket) {
-    // console.log('a user connected');
-    
-    socket.on('disconnect', function() {
-      // console.log('user disconnected');
+  // Creating our socket using the instance of the server
+  const io = socketIO(server);
+  // Set socket.io listeners.
+  io.on('connection', (socket) => {
+    console.log('a user connected');
+
+    // On conversation entry, join broadcast channel
+    socket.on('enter conversation', (conversation) => {
+      socket.join(conversation);
+      // console.log('joined ' + conversation);
     });
-  
-    socket.on('chat message', function(msg) {
-      // console.log(msg);
-      io.emit('chat message', {response: msg});
+
+    socket.on('leave conversation', (conversation) => {
+      socket.leave(conversation);
+      // console.log('left ' + conversation);
+    })
+
+    socket.on('new message', (conversationId, message) => {
+      console.log('qqqqqqq',conversationId, message);
+      io.emit('new message', message);
+      // io.sockets.in(conversation).emit('refresh messages', conversation);
+      });
+
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
     });
-    
   });
+  // io.on('connection', function(socket) {
+  //   // console.log('a user connected');
+    
+  //   socket.on('disconnect', function() {
+  //     // console.log('user disconnected');
+  //   });
+  
+  //   socket.on('chat message', function(msg) {
+  //     // console.log(msg);
+  //     io.emit('chat message', {response: msg});
+  //   });
+    
+  // });
+
 
   const boot = function () {
     server.listen(app.get('port'), function () {

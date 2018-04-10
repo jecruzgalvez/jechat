@@ -8,4 +8,5 @@ exports.logout = function (req, res, next) {
     res.clearCookie('userId');
     res.end('Logout!');
     // res.redirect('/')
+    next();
 };

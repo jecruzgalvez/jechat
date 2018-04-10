@@ -8,9 +8,9 @@ exports.saveMessage = function (req, res, next) {
     var author = req.cookies['userId'];
     var conversationId = req.query.conversationId;
     var body = req.query.body;
-    console.log('conversationId', conversationId);
-    console.log('body', body);
-    console.log('author', author);
+    // console.log('conversationId', conversationId);
+    // console.log('body', body);
+    // console.log('author', author);
     if (!conversationId) {
         res.status(422).send({ error: 'There is not conversationId.' });
         return next();
@@ -42,7 +42,7 @@ exports.saveMessage = function (req, res, next) {
                     return next(err);
                 }
                 else {
-                    console.log('mesages===============>', messages);
+                    // console.log('mesages===============>',messages);
                     res.setHeader('Content-Type', 'application/json');
                     res.send(JSON.stringify({ messages: messages }));
                 }

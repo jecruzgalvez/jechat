@@ -4,8 +4,11 @@ export { fetchConversations };
 import   newConversation          from './act_conv_newConversation';
 export { newConversation };
 
-import   fetchFriends             from './act_users_fetchFriends';
+import   fetchFriends             from './act_friends_fetchFriends';
 export { fetchFriends };
+
+import   fetchUsers             from './act_users_fetchUsers';
+export { fetchUsers };
 
 import   saveMessage              from './act_mess_saveMessage';
 export { saveMessage };

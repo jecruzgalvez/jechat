@@ -6,8 +6,7 @@ var message_1 = require("../models/message");
  */
 exports.fetchMessages = function (req, res, next) {
     var conversationId = req.query.conversationId;
-    // conversationId = '5ac3b52b92260d1bf6b81d88';
-    console.log('conversationId', conversationId);
+    // console.log('conversationId', conversationId);
     if (!conversationId) {
         res.status(422).send({ error: 'Please choose a valid conversation Id for your messages.' });
         return next();
@@ -20,7 +19,7 @@ exports.fetchMessages = function (req, res, next) {
             return next(err);
         }
         else {
-            console.log('mesages===============>', messages);
+            // console.log('mesages===============>',messages);
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify({ messages: messages }));
         }

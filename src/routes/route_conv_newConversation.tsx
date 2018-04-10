@@ -32,56 +32,56 @@ export const newConversation = (req: express.Request , res: express.Response, ne
     // console.log('newConversation===============>', newConversation._id)
 
     Conversation.find({ participants: userId })
-    .exec(function(err, conversations) {
-  
-    if (err) {
-      res.send({ error: err });
-      return next(err);
-    }
-    else {     
-      // console.log('conversations',conversations);
-      interface convsI {
-          participants: string[],
-          _id: ''
+      .exec(function(err, conversations) {
+    
+      if (err) {
+        res.send({ error: err });
+        return next(err);
       }
-      let conversationsWithNames: convsI[] = [];
+      else {     
+        // console.log('conversations',conversations);
+        interface convsI {
+            participants: string[],
+            _id: ''
+        }
+        let conversationsWithNames: convsI[] = [];
 
-      conversations.map((conversation) => {
+        conversations.map((conversation) => {
 
-        let conv : convsI = {
-          participants: [],
-         _id: conversation._id
-        }        
+          let conv : convsI = {
+            participants: [],
+          _id: conversation._id
+          }        
 
-        conversation['participants'].map( (part: any) => {          
+          conversation['participants'].map( (part: any) => {          
 
-          if(part != userId){
-            User.find({ '_id': part }, {firstName: 1})
-              .sort('-firstName')
-              .populate({
-                path: "author"
-              })             
-            .exec(function(err, participant) {
-              if (err) {
-                res.send({ error: err });
-                return next(err);
-              }
-              conv.participants.push(participant[0]['firstName']);
-
-              if( conv.participants.length === conversation['participants'].length -1) {
-                conversationsWithNames.push(conv);
-
-                if(conversationsWithNames.length === conversations.length) {
-                  // console.log(conversationsWithNames);
-                  res.setHeader('Content-Type', 'application/json');
-                  res.send(JSON.stringify({ conversations: conversationsWithNames }));
+            if(part != userId){
+              User.find({ '_id': part }, {firstName: 1})
+                .sort('-firstName')
+                .populate({
+                  path: "author"
+                })             
+              .exec(function(err, participant) {
+                if (err) {
+                  res.send({ error: err });
+                  return next(err);
                 }
-              }
-            });
-          }
+                conv.participants.push(participant[0]['firstName']);
+
+                if( conv.participants.length === conversation['participants'].length -1) {
+                  conversationsWithNames.push(conv);
+
+                  if(conversationsWithNames.length === conversations.length) {
+                    // console.log(conversationsWithNames);
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify({ conversations: conversationsWithNames }));
+                  }
+                }
+              });
+            }
+          });
         });
-      });
-    }
-  });
+      }
+    });
   });
 }
