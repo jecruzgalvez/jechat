@@ -7,7 +7,10 @@ export { newConversation };
 import   fetchFriends             from './act_friends_fetchFriends';
 export { fetchFriends };
 
-import   fetchUsers             from './act_users_fetchUsers';
+import   newFriend                from './act_friends_newFriend';
+export { newFriend };
+
+import   fetchUsers               from './act_users_fetchUsers';
 export { fetchUsers };
 
 import   saveMessage              from './act_mess_saveMessage';
@@ -18,6 +21,10 @@ export { fetchMessages };
 
 import   selectConversation       from './act_conv_selectConversation';
 export { selectConversation };
+
+import   logout                   from './act_logout';
+export { logout };
+
 
 //////////////////////////////  setVisibilityFilter //////////////////////////////
 export const setVisibilityFilter = (filter: string) => ({

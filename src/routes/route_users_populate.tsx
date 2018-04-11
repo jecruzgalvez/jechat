@@ -19,8 +19,7 @@ export const populate = (req: express.Request , res: express.Response, next: Fun
     _id: new mongoose.Types.ObjectId(),
     firstName: 'Berenice',
     email: 'b@gmail.com',
-    password: 'bbb',
-    friends: a._id
+    password: 'bbb'
   });
   b.save();
 
@@ -28,8 +27,7 @@ export const populate = (req: express.Request , res: express.Response, next: Fun
     _id: new mongoose.Types.ObjectId(),
     firstName: 'Carlos',
     email: 'c@gmail.com',
-    password: 'ccc',
-    friends: [a._id, b._id]
+    password: 'ccc'
   });
   c.save();
 
@@ -37,8 +35,7 @@ export const populate = (req: express.Request , res: express.Response, next: Fun
     _id: new mongoose.Types.ObjectId(),
     firstName: 'David',
     email: 'd@gmail.com',
-    password: 'ddd',
-    friends: [a._id, b._id, c._id]
+    password: 'ddd'
   });
   d.save();
 
@@ -46,8 +43,7 @@ export const populate = (req: express.Request , res: express.Response, next: Fun
     _id: new mongoose.Types.ObjectId(),
     firstName: 'Elpidio',
     email: 'e@gmail.com',
-    password: 'eee',
-    friends: [a._id, b._id, c._id, d._id ]
+    password: 'eee'
   });
   e.save();
 

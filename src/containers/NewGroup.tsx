@@ -13,12 +13,12 @@ class NewGroup extends React.Component <NewGroupProps, {}> {
       <div className="static-modal">
         <Modal.Dialog>
           <Modal.Header>
-            <Modal.Title>New group </Modal.Title>
+            <Modal.Title>Select the friends to create a new group </Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
           <ul>
-            List of contacts to add to the group
+            List of friends to add to the group
           </ul>            
           </Modal.Body>
 

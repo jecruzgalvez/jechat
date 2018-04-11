@@ -1,10 +1,8 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import * as socketIoClient from 'socket.io-client';
-import { Jumbotron, ListGroup, ListGroupItem, Button } from 'react-bootstrap';
+import { Panel, Jumbotron, ListGroup, ListGroupItem, Button } from 'react-bootstrap';
 import { fetchUsers,  saveMessage, fetchMessages } from "../actions/index";
-
-// var userNames: any;
 
 interface ChatProps {
   allConversations: any;
@@ -24,7 +22,7 @@ interface ChatState {
 // bitbucket
 
 class Chat extends React.Component <ChatProps, ChatState> {
-  constructor(props: ChatProps) {
+  constructor(props: ChatProps) {    
     super(props);
     this.state = {
       response: '',
@@ -39,20 +37,18 @@ class Chat extends React.Component <ChatProps, ChatState> {
     this.showParticipants = this.showParticipants.bind(this);
   } 
   
+  messagesEnd: any;
+
   componentDidMount() {
-    // this.props.fetchUsers();
-    // userNames = new Map();
-    // this.props.users.map( (user: any) => {
-    //   // debugger
-    //   userNames.set( hola, 'sssssaaaaa');
-    // })
+    this.props.fetchUsers();    
 
     const  socket: SocketIOClient.Socket = socketIoClient(this.state.endpoint);
     socket.on('new message', () => {
       this.props.fetchMessages(this.props.currentConversation);
     });
-  }
 
+    this.messagesEnd = null;
+  }
 
   handleSend(event: any) {
     const  socket: SocketIOClient.Socket = socketIoClient(this.state.endpoint);
@@ -86,12 +82,26 @@ class Chat extends React.Component <ChatProps, ChatState> {
     });    
   }
 
+  componentDidUpdate() {
+   this.scrollToBottom();
+  }
+
+  scrollToBottom = () => {
+    if(this.messagesEnd)
+      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  }
+
   renderList() {
     return this.props.messages.map((message: any) => {
+      let author: any;
+      author = this.props.users.find((user: any) => {
+        return message.author == user._id;
+      })
+
       return (
-        <ListGroupItem key={message._id}>
+        <ListGroupItem key={message._id} header={`${author.firstName}, ${message.createdAt}`} >
           {message.body}
-        </ListGroupItem>        
+        </ListGroupItem>
       );
     });
   }
@@ -100,31 +110,37 @@ class Chat extends React.Component <ChatProps, ChatState> {
     return (
       <div>
         { this.props.currentConversation?
-          <Jumbotron className="w-100 h-100">
+        
+          <form onSubmit={this.handleSend}>
+
             <h3>{this.showParticipants()}</h3>
-            
-            <form onSubmit={this.handleSend}>
-                <div>
-                  <ListGroup>
+
+            <Panel style={{height: "45vh", overflow:"auto"}}>                          
+                  <ListGroup >
                     {this.renderList()}
                   </ListGroup>
 
-                </div>
-                <br/>
-                <input
-                  type="text"
-                  value={this.state.inputText}
-                  onChange={this.handleInputText}
-                />
-                <Button
-                  onClick={this.handleSend}
-                >
-                  Send
-                </Button>
-            </form>
-          </Jumbotron>
+                  <div
+                    style={{ float:"left", clear: "both" }}
+                    ref={(el) => { this.messagesEnd = el; }}>
+                  </div>
+            </Panel>
+
+            <input
+              type="text"
+              value={this.state.inputText}
+              onChange={this.handleInputText}
+            />
+            <Button
+              onClick={this.handleSend}
+            >
+              Send message
+            </Button>
+            </form>                        
         :
-          <div>Please select a conversation.</div>
+          <Jumbotron className="w-100 h-100">
+            <h3>Please select a conversation.</h3>           
+          </Jumbotron>
       }
       </div>
      

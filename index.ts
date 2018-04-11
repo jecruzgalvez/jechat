@@ -83,8 +83,9 @@ db.once('open', function() {
   app.get('/api/login',                    routes.login);
   app.get('/api/logout',                   routes.logout);
 
-  app.get('/api/fetchUsers',       auth, routes.fetchUsers);
+  app.get('/api/fetchUsers',         auth, routes.fetchUsers);
   app.get('/api/fetchFriends',       auth, routes.fetchFriends);
+  app.get('/api/newFriend',          auth, routes.newFriend);
 
   app.get('/api/newConversation',    auth, routes.newConversation);
   app.get('/api/fetchConversations', auth, routes.fetchConversations);

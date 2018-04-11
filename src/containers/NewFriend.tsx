@@ -2,37 +2,37 @@ import * as React from 'react';
 import { connect } from "react-redux";
 import { Modal, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import { fetchFriends, newConversation } from "../actions/index";
+import { fetchUsers, newFriend } from "../actions/index";
 
-interface OneToOneProps {
-  friends: {_id: string, firstName: string}[];
-  fetchFriends: () => void;
-  handleToggleModalOneToOne: () => void;
-  newConversation: any;
+interface NewFriendProps {
+  users: {_id: string, firstName: string}[];
+  fetchUsers: () => void;
+  handleToggleModalNewFriend: () => void;
+  newFriend: any;
 }
 
-class OneToOne extends React.Component <OneToOneProps, {}> {
-  constructor(props: OneToOneProps) {
+class NewFriend extends React.Component <NewFriendProps, {}> {
+  constructor(props: NewFriendProps) {
     super(props);
     this.handleClickListGroup = this.handleClickListGroup.bind(this);
   }
 
   componentDidMount() {
-    this.props.fetchFriends();
+    this.props.fetchUsers();
   }
 
   handleClickListGroup(event: React.MouseEvent <ListGroupItem & HTMLLIElement>) {
     console.log(event.currentTarget.dataset.id);
     // debugger;    
-    this.props.newConversation(event.currentTarget.dataset.id, event.currentTarget.dataset.firstname);
-    this.props.handleToggleModalOneToOne();
+    this.props.newFriend(event.currentTarget.dataset.id);
+    this.props.handleToggleModalNewFriend();
   }
 
   renderList() {
-    return this.props.friends.map((friend ) => {
+    return this.props.users.map((user ) => {
       return (
-        <ListGroupItem key={friend._id} onClick={this.handleClickListGroup} data-id={friend._id} data-firstname={friend.firstName} >
-          {friend.firstName}
+        <ListGroupItem key={user._id} onClick={this.handleClickListGroup} data-id={user._id} data-firstname={user.firstName} >
+          {user.firstName}
         </ListGroupItem>        
       );
     });
@@ -44,7 +44,7 @@ class OneToOne extends React.Component <OneToOneProps, {}> {
         <Modal.Dialog>
 
           <Modal.Header>
-            <Modal.Title>Click on a friend to open one to one conversation.</Modal.Title>
+            <Modal.Title>Click on a user to make him/her your friend.</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
@@ -56,7 +56,7 @@ class OneToOne extends React.Component <OneToOneProps, {}> {
           <Modal.Footer>
             <Button
               bsStyle="primary"
-              onClick={this.props.handleToggleModalOneToOne}
+              onClick={this.props.handleToggleModalNewFriend}
             >
               Cancel
             </Button>
@@ -70,15 +70,15 @@ class OneToOne extends React.Component <OneToOneProps, {}> {
 
 function mapStateToProps(state: any) {  
   return {
-    friends: state.friends
+    users: state.users
   };
 }
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    fetchFriends: () => dispatch(fetchFriends()),
-    newConversation: (recipient: any) => dispatch(newConversation(recipient))
+    fetchUsers: () => dispatch(fetchUsers()),
+    newFriend: (newFriendId: any) => dispatch(newFriend(newFriendId))
   }  
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OneToOne);
+export default connect(mapStateToProps, mapDispatchToProps)(NewFriend);

@@ -12,10 +12,10 @@ class Dashboard extends React.Component {
       
       <Grid>
         <Row className="show-grid">
-          <Col md={4}>
+          <Col md={5}>
             <Sidebar />
           </Col>
-          <Col md={8}>
+          <Col md={7}>
             <Chat />
           </Col>
         </Row>

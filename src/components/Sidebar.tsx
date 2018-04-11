@@ -2,14 +2,16 @@ import * as React from 'react';
 import { Button, ButtonGroup, Jumbotron } from 'react-bootstrap';
 
 import OneToOne      from '../containers/OneToOne';
+import NewFriend     from '../containers/NewFriend';
 import NewGroup      from '../containers/NewGroup';
 import Conversations from '../containers/Conversations';
 
 // import ContactsOrder from './ContactsOrder';
 
 interface SidebarSatate {
-  showModalOneToOne: boolean;
-  showModalNewGroup: boolean;
+  showModalNewFriend: boolean;
+  showModalOneToOne:  boolean;
+  showModalNewGroup:  boolean;
 }
 
 class Sidebar extends React.Component <{}, SidebarSatate> {
@@ -17,12 +19,20 @@ class Sidebar extends React.Component <{}, SidebarSatate> {
     super(props);
 
     this.state = {
-      showModalOneToOne: false,
-      showModalNewGroup: false
+      showModalNewFriend: false,
+      showModalOneToOne:  false,
+      showModalNewGroup:  false
     };
 
+    this.handleToggleModalNewFriend = this.handleToggleModalNewFriend.bind(this);
     this.handleToggleModalOneToOne = this.handleToggleModalOneToOne.bind(this);
     this.handleToggleModalNewGroup = this.handleToggleModalNewGroup.bind(this);
+  }
+
+  handleToggleModalNewFriend() {
+    this.setState({
+      showModalNewFriend: !this.state.showModalNewFriend
+    });
   }
 
   handleToggleModalOneToOne() {
@@ -42,11 +52,13 @@ class Sidebar extends React.Component <{}, SidebarSatate> {
       <Jumbotron className="w-100 h-100">
       
         <ButtonGroup>
-          <Button bsStyle="primary" onClick={this.handleToggleModalOneToOne}> Contacts </Button>
+          <Button bsStyle="primary" onClick={this.handleToggleModalNewFriend}> New friend  </Button>
+          <Button bsStyle="primary" onClick={this.handleToggleModalOneToOne}> One to one </Button>
           <Button bsStyle="primary" onClick={this.handleToggleModalNewGroup}> New group </Button>
         </ButtonGroup>
-        {this.state.showModalOneToOne ? <OneToOne handleToggleModalOneToOne ={this.handleToggleModalOneToOne} /> : <div /> }        
-        {this.state.showModalNewGroup ? <NewGroup handleToggleModalNewGroup={this.handleToggleModalNewGroup} /> : <div /> }
+        {this.state.showModalNewFriend ? <NewFriend handleToggleModalNewFriend ={this.handleToggleModalNewFriend} /> : <div /> }        
+        {this.state.showModalOneToOne  ? <OneToOne handleToggleModalOneToOne   ={this.handleToggleModalOneToOne}  /> : <div /> }        
+        {this.state.showModalNewGroup  ? <NewGroup handleToggleModalNewGroup   ={this.handleToggleModalNewGroup}  /> : <div /> }
 
         {/* <ContactsOrder /> */}
         <Conversations />

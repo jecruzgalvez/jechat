@@ -13,15 +13,15 @@ class Header extends React.Component <HeaderProps, {}> {
   return (
     <div>
       <h1>
-        JEChat: {this.props.conversations.currentConversation}
+        JEChat
       </h1>
       <hr/>
-    </div>    
+    </div>
   );
   }
 }
 
-function mapStateToProps(state: any) {  
+function mapStateToProps(state: any) {
   return {
     conversations: state.conversations
   };

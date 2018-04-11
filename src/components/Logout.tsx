@@ -1,20 +1,38 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { logout } from '../actions/index';
 import axios from 'axios';
 import { Jumbotron } from 'react-bootstrap';
 
-class Logout extends React.Component {
+interface LogoutProps {
+  logout: () => void;
+}
+
+
+class Logout extends React.Component <LogoutProps, {}> {
+  constructor(props: LogoutProps){
+    super(props);
+  }
+  
 
   componentDidMount() {
-    axios.get('/api/logout',{})
+    axios.get('/api/logout',{});
+    this.props.logout();   
   }
 
   render() {
     return (
       <Jumbotron>
-        Logout
+        <h3>Good bye.</h3>        
       </Jumbotron>
     );
   }
 }
 
-export default Logout;
+function mapDispatchToProps(dispatch: any) {
+  return {
+    logout: () => dispatch(logout())
+  }
+}
+
+export default connect(null,mapDispatchToProps)(Logout);

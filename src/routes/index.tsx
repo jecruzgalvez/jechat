@@ -6,6 +6,9 @@ export { populate };
 import { fetchFriends }        from './route_users_fetchFriends';
 export { fetchFriends };
 
+import { newFriend }           from './route_friends_newFriend';
+export { newFriend };
+
 import { fetchUsers }          from './route_users_fetchUsers';
 export { fetchUsers };
 
