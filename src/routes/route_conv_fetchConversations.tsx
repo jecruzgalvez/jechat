@@ -8,7 +8,7 @@ import { User } from '../models/user';
 export const fetchConversations = (req: express.Request , res: express.Response, next: Function) => {
   let userId = req.cookies['userId']; 
   
-  if(!userId) {
+  if (!userId) {
     res.status(422).send({ error: 'Please choose a valid userId.' });
     return next();
   }
@@ -19,21 +19,20 @@ export const fetchConversations = (req: express.Request , res: express.Response,
     if (err) {
       res.send({ error: err });
       return next(err);
-    }
-    else {     
+    } else {
       // console.log('conversations',conversations);
-      interface convsI {
-          participants: string[],
-          _id: ''
+      interface Iconvs {
+          participants: string[];
+          _id: '';
       }
-      let conversationsWithNames: convsI[] = [];
+      let conversationsWithNames: Iconvs[] = [];
 
       conversations.map((conversation) => {
 
-        let conv : convsI = {
+        let conv: Iconvs = {
           participants: [],
          _id: conversation._id
-        }        
+        };
 
         conversation['participants'].map( (part: any) => {          
 
@@ -50,10 +49,10 @@ export const fetchConversations = (req: express.Request , res: express.Response,
               }
               conv.participants.push(participant[0]['firstName']);
 
-              if( conv.participants.length === conversation['participants'].length -1) {
+              if (conv.participants.length === conversation['participants'].length -1) {
                 conversationsWithNames.push(conv);
 
-                if(conversationsWithNames.length === conversations.length) {
+                if (conversationsWithNames.length === conversations.length) {
                   // console.log(conversationsWithNames);
                   res.setHeader('Content-Type', 'application/json');
                   res.send(JSON.stringify({ conversations: conversationsWithNames }));
@@ -65,4 +64,4 @@ export const fetchConversations = (req: express.Request , res: express.Response,
       });
     }
   });
-}
+};

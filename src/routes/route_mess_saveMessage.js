@@ -36,22 +36,20 @@ exports.saveMessage = function (req, res, next) {
         else {
             message_1.Message.find({ 'conversationId': conversationId }, { body: 1, author: 1, createdAt: 1 })
                 .sort('createdAt')
-                .exec(function (err, messages) {
-                if (err) {
-                    res.send({ error: err });
-                    return next(err);
+                .exec(function (error, messages) {
+                if (error) {
+                    res.send({ error: error });
+                    return next(error);
                 }
                 else {
                     // console.log('mesages===============>',messages);
                     res.setHeader('Content-Type', 'application/json');
                     res.send(JSON.stringify({ messages: messages }));
                 }
-                return next();
             });
             // console.log('newMessage=============>', newMessage);
             // res.setHeader('Content-Type', 'application/json');
             // res.send(JSON.stringify({ status: 'messageSaved' }));
         }
-        return next();
     });
 };

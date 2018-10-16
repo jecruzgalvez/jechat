@@ -35,4 +35,4 @@ export { saveMessage };
 
 export const index = (req: express.Request , res: express.Response, next: Function) => {
   next();
-}
+};

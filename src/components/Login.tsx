@@ -2,8 +2,8 @@ import * as React from 'react';
 import axios from 'axios';
 
 import { Redirect } from 'react-router';
-
 import { Alert, Button, Jumbotron, Form, FormGroup, HelpBlock, FormControl, Col } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 interface LoginState {
   inputEmail: string;
@@ -93,7 +93,7 @@ class Login extends React.Component <{}, LoginState> {
           }
       })
       .then( (response: any) => {
-        console.log('response: ',response);
+        // console.log('response: ',response);
         
         if (response.data.response === 'success') {
           this.setState({loggedIn: true});
@@ -110,7 +110,7 @@ class Login extends React.Component <{}, LoginState> {
         }
       })
       .catch( (error: any) => {
-        console.error('Error:', error);
+        // console.error('Error:', error);
       });
     }
     event.preventDefault();
@@ -148,22 +148,37 @@ class Login extends React.Component <{}, LoginState> {
     if (this.state.loginFailed) {
       return (
         <Alert bsStyle="danger">
-          <h2>Login failed!</h2>
+          <h2>
+            <FormattedMessage
+              id="login.loginFailed"
+              defaultMessage= "Login failed!"
+            />
+          </h2>
           <Button 
             bsStyle="primary"
-
             onClick={this.handleTryAgain}
           >
-            Try again
+            <FormattedMessage
+              id="login.tryAgain"
+              defaultMessage= "Try again"
+            />
           </Button>
 
-          <span> or </span>
+          <span>
+            <FormattedMessage
+              id="login.or"
+              defaultMessage= " Or "
+            />
+          </span>
 
           <Button
             bsStyle="primary"
             onClick={this.handleRegistration}
           >
-            Register
+            <FormattedMessage
+              id="login.register"
+              defaultMessage= "Register"
+            />
           </Button>
         </Alert>
       );
@@ -178,7 +193,11 @@ class Login extends React.Component <{}, LoginState> {
             validationState={this.emailGetValidationState()}
           >
             <Col  sm={2}>
-              Email
+              <FormattedMessage
+                id="login.email"
+                defaultMessage= "Email"
+              />
+              
             </Col>
             <Col sm={4}>
               <FormControl
@@ -191,7 +210,12 @@ class Login extends React.Component <{}, LoginState> {
             </Col>
             <Col sm={6}>
               {this.state.inputEmailError ?
-                  <HelpBlock>Please enter a valid e-mail address.</HelpBlock>
+                  <HelpBlock>
+                    <FormattedMessage
+                      id="login.enterValidEmail"
+                      defaultMessage= "Please enter a valid e-mail address."
+                    />
+                  </HelpBlock>
                   :
                   <HelpBlock />
                 }
@@ -204,7 +228,10 @@ class Login extends React.Component <{}, LoginState> {
             validationState={this.passwordGetValidationState()}
           >
             <Col  sm={2}>
-              Password
+              <FormattedMessage
+                id="login.password"
+                defaultMessage= "Password"
+              />
             </Col>
             <Col sm={4}>
               <FormControl
@@ -217,7 +244,12 @@ class Login extends React.Component <{}, LoginState> {
             </Col>
             <Col sm={6}>
               { this.state.inputPasswordError ?
-                <HelpBlock>Your password needs to be between 3 and 5 characters long.</HelpBlock>
+                <HelpBlock>
+                  <FormattedMessage
+                    id="login.passwordBetween3And5"
+                    defaultMessage= "Your password needs to be between 3 and 5 characters long."
+                  />
+                </HelpBlock>
                 :
                 <HelpBlock/>
             }
@@ -230,7 +262,10 @@ class Login extends React.Component <{}, LoginState> {
                 type="submit"
                 onClick={this.handleSubmit}
               >
-                Sign in
+                <FormattedMessage
+                  id="login.signIn"
+                  defaultMessage= "Sign in"
+                />
               </Button>
             </Col>
           </FormGroup>

@@ -1,0 +1,53 @@
+{
+  "app.login"       : "Login",
+  "app.registration": "Registration",  
+  "app.dashboard"   : "Dashboard",
+  "app.settings"    : "Settings",
+  "app.logout"      : "Logout",
+
+  "login.loginFailed"         : "Login failed!",
+  "login.tryAgain"            : "Try again",
+  "login.or"                  : " or ",
+  "login.register"            : "Register",
+  "login.email"               : "Email",
+  "login.enterValidEmail"     : "Please enter a valid e-mail address.",
+  "login.password"            : "Password",
+  "login.passwordBetween3And5": "Your password needs to be between 3 and 5 characters long.",
+  "login.signIn"              : "Sign in",
+
+  "registration.userAlreadyExists"    : "A user with the same email already exists.",
+  "registration.tryAgain"             : "Try again",
+  "registration.firstName"            : "First name",
+  "registration.firstNamePlaceHolder" : "Your real name",
+  "registration.userNameCanNotBeEmpty": "User name can not be empty.",
+  "registration.email"                : "Email",
+  "registration.emailPlaceHolder"     : "example@example.com",
+  "registration.enterAValidEmail"     : "Please enter a valid e-mail address.",
+  "registration.password"             : "Password",
+  "registration.passwordBetween3And5" : "Your password needs to be between 3 and 5 characters long.",
+  "registration.passwordConfirmation" : "Password confirmation",
+  "registration.passwordsDoNotMatch"  : "Passwords do not match.",
+  "registration.register"             : "Register",
+
+  "sidebar.newFriend": "New friend",
+  "sidebar.oneToOne" : "One to one",
+  "sidebar.newGroup" : "New group",
+
+  "newFriend.clickToMakeFriend": "Click on a user to make him/her your friend.",
+  "newFriend.cancel"           : "Cancel",
+
+  "oneToOne.openOneToOne": "Click on a friend to open one to one conversation.",
+  "oneToOne.cancel"      : "Cancel",
+
+  "newGroup.selectFriendsForNewGroup": "Select the friends to create a new group",
+  "newGroup.cancel"                  : "Cancel",
+
+  "logout.GoodBye": "Good bye.",
+
+  "chat.sendMessage"        : "Send message",
+  "chat.selectAConversation": "Please select a conversation.",
+
+  "settings.language": "Language",
+  "settings.english" : "English",
+  "settings.spanish" : "Español"
+}

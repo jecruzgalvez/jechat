@@ -1,3 +1,5 @@
+/// <reference path="node.d.ts">
+
 import * as express from 'express';
 import * as http from 'http';
 import * as path from 'path';
@@ -93,7 +95,7 @@ db.once('open', function() {
   app.get('/api/saveMessage',        auth, routes.saveMessage);
   app.get('/api/fetchMessages',      auth, routes.fetchMessages);
 
-  app.all('*', function (req, res) {
+  app.all('*', function (req: express.Request , res: express.Response, next: Function) {
     res.status(404).send();
   });
 
@@ -103,7 +105,7 @@ db.once('open', function() {
   const io = socketIO(server);
   // Set socket.io listeners.
   io.on('connection', (socket) => {
-    console.log('a user connected');
+    // console.log('a user connected');
 
     // On conversation entry, join broadcast channel
     socket.on('enter conversation', (conversation) => {
@@ -114,16 +116,16 @@ db.once('open', function() {
     socket.on('leave conversation', (conversation) => {
       socket.leave(conversation);
       // console.log('left ' + conversation);
-    })
+    });
 
     socket.on('new message', (conversationId, message) => {
-      console.log('qqqqqqq',conversationId, message);
+      // console.log('qqqqqqq', conversationId, message);
       io.emit('new message', message);
       // io.sockets.in(conversation).emit('refresh messages', conversation);
       });
 
     socket.on('disconnect', () => {
-      console.log('user disconnected');
+      // console.log('user disconnected');
     });
   });
   // io.on('connection', function(socket) {
@@ -137,9 +139,7 @@ db.once('open', function() {
   //     // console.log(msg);
   //     io.emit('chat message', {response: msg});
   //   });
-    
   // });
-
 
   const boot = function () {
     server.listen(app.get('port'), function () {
@@ -153,7 +153,7 @@ db.once('open', function() {
   if (require.main === module) {
     boot();
   } else {
-    console.info('Running app as a module');
+    // console.info('Running app as a module');
     exports.boot = boot;
     exports.shutdown = shutdown;
     exports.port = app.get('port');

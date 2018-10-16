@@ -11,7 +11,7 @@ exports.fetchUsers = function (req, res, next) {
             res.status(500).send();
         }
         else if (users) {
-            debugger;
+            // debugger;
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify({ users: users }));
         }

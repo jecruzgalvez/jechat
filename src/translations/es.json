@@ -1,0 +1,53 @@
+{
+  "app.login"       : "Ingresar",
+  "app.registration": "Registrarse",
+  "app.dashboard"   : "Tablero",
+  "app.settings"    : "Configuración",
+  "app.logout"      : "Salir",
+
+  "login.loginFailed"         :  "Ingreso fallido!",
+  "login.tryAgain"            : "Intentar de nuevo",
+  "login.or"                  : " o ",
+  "login.register"            : "Regitrarse",
+  "login.email"               : "Correo electrónico",
+  "login.enterValidEmail"     : "Por favor ingrese un correo electrónico válido.",
+  "login.password"            : "Contraseña",
+  "login.passwordBetween3And5": "La contraseña debe de tener entre 3 y 5 caracteres.",
+  "login.signIn"              : "Ingresar",
+
+  "registration.userAlreadyExists"    : "Ya existe otro usuario con el mismo correo electrónico.",
+  "registration.tryAgain"             : "Intentar de nuevo",
+  "registration.firstName"            : "Nombre",
+  "registration.firstNamePlaceHolder" : "Tu nombre real",
+  "registration.userNameCanNotBeEmpty": "El nombre no puede estar en blanco.",
+  "registration.email"                : "Correo electrónico",
+  "registration.emailPlaceHolder"     : "ejemplo@ejemplo.com",
+  "registration.enterAValidEmail"     : "Por favor ingresa una cuenta de correo electrónico válida.",
+  "registration.password"             : "Contraseña",
+  "registration.passwordBetween3And5" : "La contraseña debe de tener entre 3 y 5 caracteres.",
+  "registration.passwordConfirmation" : "Confirmación de contraseña",
+  "registration.passwordsDoNotMatch"  : "Las contraseñas no coinciden.",
+  "registration.register"             : "Registrarse",
+
+  "sidebar.newFriend": "Nuevo amigo",
+  "sidebar.oneToOne" : "Uno a uno",
+  "sidebar.newGroup" : "Nuevo grupo",
+
+  "newFriend.clickToMakeFriend": "Haz click sobre un usuario para hacerlo tu amigo",
+  "newFriend.cancel"           : "Cancelar",
+
+  "oneToOne.openOneToOne": "Haz click en un amigo para conversar uno a uno.",
+  "oneToOne.cancel"      : "Cancelar",
+
+  "newGroup.selectFriendsForNewGroup": "Selecciona los amigos para crear el grupo.",
+  "newGroup.cancel"                  : "Cancelar",
+
+  "logout.GoodBye": "Hasta luego.",
+
+  "chat.sendMessage"        : "Enviar mensaje",
+  "chat.selectAConversation": "Por favor selecciona una conversación.",
+
+  "settings.language": "Idioma",
+  "settings.english" : "English",
+  "settings.spanish" : "Español"
+}

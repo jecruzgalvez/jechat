@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from "react-redux";
 import { Modal, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 import { fetchUsers, newFriend } from "../actions/index";
 
@@ -44,7 +45,12 @@ class NewFriend extends React.Component <NewFriendProps, {}> {
         <Modal.Dialog>
 
           <Modal.Header>
-            <Modal.Title>Click on a user to make him/her your friend.</Modal.Title>
+            <Modal.Title>
+              <FormattedMessage
+                id="newFriend.clickToMakeFriend"
+                defaultMessage="Click on a user to make him/her your friend."
+              />
+          </Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
@@ -58,7 +64,10 @@ class NewFriend extends React.Component <NewFriendProps, {}> {
               bsStyle="primary"
               onClick={this.props.handleToggleModalNewFriend}
             >
-              Cancel
+              <FormattedMessage
+                id="newFriend.cancel"
+                defaultMessage="Cancel"
+              />
             </Button>
           </Modal.Footer>
 

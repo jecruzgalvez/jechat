@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Redirect } from 'react-router';
 import { Alert, Button, Jumbotron, Form, FormGroup, FormControl, Col, HelpBlock } from 'react-bootstrap';
+import { FormattedMessage, injectIntl, InjectedIntlProps } from 'react-intl';
 import axios from 'axios';
 
-
-interface RegisterState {
+interface RegistrationState {
   inputFirstName: string;
   inputFirstNameError: boolean;
   inputEmail: string;
@@ -17,14 +17,14 @@ interface RegisterState {
   existingUser: boolean;
 }
 
-class Registration extends React.Component <{}, RegisterState> {
-  constructor(props: {}) {
+class Registration extends React.Component <InjectedIntlProps , RegistrationState> {
+  constructor(props: InjectedIntlProps ) {
     super(props);
-    
+
     this.state = {
       inputFirstName: '',
       inputFirstNameError: false,
-      inputEmail: 'a@gmail.com',
+      inputEmail: '',
       inputEmailError: false,
       inputPassword: '',
       inputPasswordError: false,
@@ -184,18 +184,27 @@ class Registration extends React.Component <{}, RegisterState> {
     if (this.state.existingUser) {
       return (
         <Alert bsStyle="warning">
-          <h4>A user with the same email already exists </h4>
+          <h4>
+          <FormattedMessage
+              id="registration.userAlreadyExists"
+              defaultMessage= "A user with the same email already exists."
+            />
+          </h4>
           <Button 
             bsStyle="primary"
-
             onClick={this.handleTryAgain}
           >
-            Try again
+            <FormattedMessage
+              id="registration.tryAgain"
+              defaultMessage= "Try again"
+            />
           </Button>
         </Alert>
       );
     }
 
+    let firstNamePlaceHolder = this.props.intl.formatMessage({id: "registration.firstNamePlaceHolder"});
+    let emailPlaceHolder =     this.props.intl.formatMessage({id: "registration.emailPlaceHolder"});
     return (
       <Jumbotron>
 
@@ -206,20 +215,28 @@ class Registration extends React.Component <{}, RegisterState> {
             validationState={this.firstNameGetValidationState()}
           >
             <Col  sm={2}>
-              First name
+              <FormattedMessage
+                id="registration.firstName"
+                defaultMessage= "First name"
+              />
             </Col>
             <Col sm={4}>
               <FormControl
                   type="text"
                   value={this.state.inputFirstName}
-                  placeholder="Your first name"
+                  placeholder={firstNamePlaceHolder}
                   onChange={this.handleInputFirstName}
                   onBlur={this.validateInputFirstName}
               />
             </Col>
             <Col sm={6}>
               {this.state.inputFirstNameError ?
-                  <HelpBlock>User name can not be empty.</HelpBlock>
+                  <HelpBlock>
+                    <FormattedMessage
+                      id="registration.userNameCanNotBeEmpty"
+                      defaultMessage= "User name can not be empty."
+                    />
+                  </HelpBlock>
                   :
                   <HelpBlock />
                 }
@@ -231,21 +248,29 @@ class Registration extends React.Component <{}, RegisterState> {
             controlId="formHorizontalEmail"
             validationState={this.emailGetValidationState()}
           >
-            <Col  sm={2}>              
-              Email
+            <Col  sm={2}>
+              <FormattedMessage
+                id="registration.email"
+                defaultMessage= "Email"
+              />
             </Col>
             <Col sm={4}>
               <FormControl
                   type="text"
                   value={this.state.inputEmail}
-                  placeholder="a@gmail.com"
+                  placeholder={emailPlaceHolder}                  
                   onChange={this.handleInputEmail}
                   onBlur={this.validateInputEmail}
               />
             </Col>
             <Col sm={6}>
               {this.state.inputEmailError ?
-                  <HelpBlock>Please enter a valid e-mail address.</HelpBlock>
+                  <HelpBlock>
+                    <FormattedMessage
+                      id="registration.enterAValidEmail"
+                      defaultMessage= "Please enter a valid e-mail address."
+                    />
+                  </HelpBlock>
                   :
                   <HelpBlock />
                 }
@@ -258,7 +283,10 @@ class Registration extends React.Component <{}, RegisterState> {
             validationState={this.passwordGetValidationState()}
           >
             <Col  sm={2}>
-              Password
+              <FormattedMessage
+                id="registration.password"
+                defaultMessage= "Password"
+              />
             </Col>
             <Col sm={4}>
               <FormControl
@@ -271,7 +299,12 @@ class Registration extends React.Component <{}, RegisterState> {
             </Col>
             <Col sm={6}>
               { this.state.inputPasswordError ?
-                <HelpBlock>Your password needs to be between 3 and 5 characters long.</HelpBlock>
+                <HelpBlock>
+                  <FormattedMessage
+                    id="registration.passwordBetween3And5"
+                    defaultMessage= "Your password needs to be between 3 and 5 characters long."
+                  />
+                </HelpBlock>
                 :
                 <HelpBlock/>
             }
@@ -283,7 +316,10 @@ class Registration extends React.Component <{}, RegisterState> {
             validationState={this.passwordConfirmationGetValidationState()}
           >
             <Col  sm={2}>
-              Password confirmation
+              <FormattedMessage
+                id="registration.passwordConfirmation"
+                defaultMessage= "Password confirmation"
+              />
             </Col>
             <Col sm={4}>
               <FormControl
@@ -296,7 +332,12 @@ class Registration extends React.Component <{}, RegisterState> {
             </Col>
             <Col sm={6}>
               { this.state.inputPasswordConfirmationError ?
-                <HelpBlock>Passwords do not match.</HelpBlock>
+                <HelpBlock>
+                  <FormattedMessage
+                    id="registration.passwordsDoNotMatch"
+                    defaultMessage= "Passwords do not match."
+                  />
+                </HelpBlock>
                 :
                 <HelpBlock/>
             }
@@ -310,7 +351,10 @@ class Registration extends React.Component <{}, RegisterState> {
                 type="submit"
                 onClick={this.handleSubmit}
               >
-                Register
+                <FormattedMessage
+                  id="registration.register"
+                  defaultMessage= "Register"
+                />
               </Button>
             </Col>
           </FormGroup>
@@ -321,4 +365,4 @@ class Registration extends React.Component <{}, RegisterState> {
   }
 }
 
-export default Registration;
+export default injectIntl(Registration);

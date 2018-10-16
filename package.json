@@ -29,6 +29,7 @@
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
+    "react-intl": "^2.4.0",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
@@ -40,10 +41,25 @@
     "socket.io-client": "^2.0.4",
     "stylus": "^0.54.5"
   },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
+    "test": "jest",
     "eject": "react-scripts-ts eject",
     "server": "concurrently \"tsc index.ts --jsx react -w\" \"nodemon index.js\""
   },
@@ -63,16 +79,25 @@
     "@types/react": "^16.0.39",
     "@types/react-bootstrap": "^0.32.5",
     "@types/react-dom": "^16.0.4",
+    "@types/react-intl": "^2.3.6",
     "@types/react-redux": "^5.0.15",
     "@types/react-router": "^4.0.22",
     "@types/react-router-dom": "^4.2.4",
+    "@types/react-test-renderer": "^16.0.1",
     "@types/redux": "^3.6.0",
     "@types/redux-actions": "^2.2.4",
     "@types/redux-thunk": "^2.1.0",
     "@types/socket.io": "^1.4.31",
     "@types/socket.io-client": "^1.4.32",
+    "babel-jest": "^22.4.3",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-typescript": "^7.0.0-alpha.19",
+    "jest": "^22.4.3",
+    "jest-cli": "^22.4.3",
+    "react-test-renderer": "^16.3.2",
     "redux-devtools": "^3.4.1",
+    "redux-devtools-extension": "^2.13.2",
+    "ts-jest": "^22.4.3",
     "typescript": "^2.7.2"
   },
   "proxy": "http://localhost:3001"

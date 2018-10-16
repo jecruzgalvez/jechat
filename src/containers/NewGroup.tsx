@@ -1,5 +1,5 @@
 import * as React from 'react';
-// import { Redirect } from 'react-router';
+import { FormattedMessage } from 'react-intl';
 
 import { Modal, Button } from 'react-bootstrap';
 
@@ -13,7 +13,12 @@ class NewGroup extends React.Component <NewGroupProps, {}> {
       <div className="static-modal">
         <Modal.Dialog>
           <Modal.Header>
-            <Modal.Title>Select the friends to create a new group </Modal.Title>
+            <Modal.Title>
+              <FormattedMessage
+                id="newGroup.selectFriendsForNewGroup"
+                defaultMessage="Select the friends to create a new group"
+              />
+            </Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
@@ -27,7 +32,10 @@ class NewGroup extends React.Component <NewGroupProps, {}> {
               bsStyle="primary"
               onClick={this.props.handleToggleModalNewGroup}
             >
-              Cancel
+              <FormattedMessage
+                id="newGroup.cancel"
+                defaultMessage="Cancel"
+              />
             </Button>
           </Modal.Footer>
         </Modal.Dialog>

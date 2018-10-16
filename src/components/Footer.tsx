@@ -5,7 +5,7 @@ const Footer = () => {
     <div>
       <hr />
       <h4>
-        &copy; Copyright 2018 jcruz@tekmexico.com
+        &copy; Copyright 2018 jorgecruzgalvez100@gmail.com
       </h4>
     </div>
   );

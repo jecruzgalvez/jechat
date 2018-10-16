@@ -48,4 +48,4 @@ export const populate = (req: express.Request , res: express.Response, next: Fun
   e.save();
 
   res.send('Users creation successfull');
-}
+};

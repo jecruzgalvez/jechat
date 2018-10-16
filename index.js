@@ -1,4 +1,5 @@
 "use strict";
+/// <reference path="node.d.ts">
 exports.__esModule = true;
 var express = require("express");
 var http = require("http");
@@ -77,7 +78,7 @@ db.once('open', function () {
     app.get('/api/fetchConversations', auth, routes.fetchConversations);
     app.get('/api/saveMessage', auth, routes.saveMessage);
     app.get('/api/fetchMessages', auth, routes.fetchMessages);
-    app.all('*', function (req, res) {
+    app.all('*', function (req, res, next) {
         res.status(404).send();
     });
     var server = http.createServer(app);
@@ -85,7 +86,7 @@ db.once('open', function () {
     var io = socketIO(server);
     // Set socket.io listeners.
     io.on('connection', function (socket) {
-        console.log('a user connected');
+        // console.log('a user connected');
         // On conversation entry, join broadcast channel
         socket.on('enter conversation', function (conversation) {
             socket.join(conversation);
@@ -96,12 +97,12 @@ db.once('open', function () {
             // console.log('left ' + conversation);
         });
         socket.on('new message', function (conversationId, message) {
-            console.log('qqqqqqq', conversationId, message);
+            // console.log('qqqqqqq', conversationId, message);
             io.emit('new message', message);
             // io.sockets.in(conversation).emit('refresh messages', conversation);
         });
         socket.on('disconnect', function () {
-            console.log('user disconnected');
+            // console.log('user disconnected');
         });
     });
     // io.on('connection', function(socket) {
@@ -126,7 +127,7 @@ db.once('open', function () {
         boot();
     }
     else {
-        console.info('Running app as a module');
+        // console.info('Running app as a module');
         exports.boot = boot;
         exports.shutdown = shutdown;
         exports.port = app.get('port');

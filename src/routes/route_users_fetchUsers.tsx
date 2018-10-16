@@ -11,9 +11,9 @@ export const fetchUsers = (req: express.Request , res: express.Response, next: F
     if ( err ) {
       res.status(500).send();
     } else if ( users) {
-      debugger
+      // debugger;
       res.setHeader('Content-Type', 'application/json');
       res.send( JSON.stringify({ users: users }));
     }          
   });    
-}
+};

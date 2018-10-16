@@ -8,15 +8,15 @@ export const newFriend = (req: express.Request , res: express.Response, next: Fu
   let userId = req.cookies['userId'];
   let newFriendId = req.query.newFriendId;
 
-  if(!userId) {
+  if (!userId) {
     res.status(422).send({ error: 'Please choose a valid userId.' });
     return next();
   }
-  if(!newFriendId) {
+  if (!newFriendId) {
     res.status(422).send({ error: 'Please choose a valid newFriendId.' });
     return next();
   }
-  if(userId === newFriendId) {
+  if (userId === newFriendId) {
     res.status(422).send({ error: 'No puedes ser tu propio amigo.' });
     return next();
   }
@@ -36,10 +36,9 @@ export const newFriend = (req: express.Request , res: express.Response, next: Fu
       if (err) {
         res.send({ error: err });
         return next(err);
-      }
-      else {
+      } else {
         // if(existingFriend !== null ) {
-          console.log('existingFriend', friends);
+        // console.log('existingFriend', friends);
         //   res.setHeader('Content-Type', 'application/json');
         //   res.send(JSON.stringify({ friends: null }));
         // }
@@ -49,4 +48,4 @@ export const newFriend = (req: express.Request , res: express.Response, next: Fu
       }  
   });
   next();
-}
+};

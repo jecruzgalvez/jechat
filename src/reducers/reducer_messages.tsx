@@ -1,5 +1,5 @@
-import { SAVE_MESSAGE }   from '../actions/act_mess_saveMessage';
-import { FETCH_MESSAGES } from '../actions/act_mess_fetchMessages';
+import { SAVE_MESSAGE }   from '../actions/actionMessages_saveMessage';
+import { FETCH_MESSAGES } from '../actions/actionMessages_fetchMessages';
 
 export default function(state = [], action: any) {
   switch (action.type) {

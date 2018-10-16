@@ -1,17 +1,17 @@
 import { combineReducers } from 'redux';
 
-import visibilityFilter  from './red_visibilityFilter';
-import friends           from './red_friends';
-import users             from './red_users';
-import conversations     from './red_conversations';
-import messages          from './red_messages';
+import users             from './reducer_users';
+import friends           from './reducer_friends';
+import conversations     from './reducer_conversations';
+import messages          from './reducer_messages';
+import language          from './reducer_language'
 
-const appReducer = combineReducers({
-  visibilityFilter,
+const appReducer = combineReducers({  
   friends,
   users,
   conversations,
-  messages
+  messages,
+  language
 })
 
 const rootReducer = (state:any , action: any) => {

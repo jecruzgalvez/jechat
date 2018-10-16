@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from "react-redux";
 import { Modal, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl'
 
 import { fetchFriends, newConversation } from "../actions/index";
 
@@ -44,7 +45,12 @@ class OneToOne extends React.Component <OneToOneProps, {}> {
         <Modal.Dialog>
 
           <Modal.Header>
-            <Modal.Title>Click on a friend to open one to one conversation.</Modal.Title>
+            <Modal.Title>
+              <FormattedMessage
+                id="oneToOne.openOneToOne"
+                defaultMessage="Click on a friend to open one to one conversation."
+              />
+            </Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
@@ -58,7 +64,10 @@ class OneToOne extends React.Component <OneToOneProps, {}> {
               bsStyle="primary"
               onClick={this.props.handleToggleModalOneToOne}
             >
-              Cancel
+              <FormattedMessage
+                id="oneToOne.cancel"
+                defaultMessage="Cancel"
+              />
             </Button>
           </Modal.Footer>
 

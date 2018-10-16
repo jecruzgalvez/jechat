@@ -8,9 +8,9 @@ exports.registration = function (req, res, next) {
     var firstName = req.query.firstName;
     var email = req.query.email;
     var password = req.query.password;
-    console.log('firstName', firstName);
-    console.log('email', email);
-    console.log('password', password);
+    // console.log('firstName', firstName);
+    // console.log('email', email);
+    // console.log('password', password);
     if (!firstName) {
         res.status(422).send({ error: 'Please choose a valid firstName.' });
         return next();
@@ -33,22 +33,22 @@ exports.registration = function (req, res, next) {
                 email: email,
                 password: password
             });
-            newUser.save(function (err, newUserInserted) {
-                if (err) {
-                    console.log(err);
-                    res.send({ error: err });
-                    return next(err);
+            newUser.save(function (error, newUserInserted) {
+                if (error) {
+                    // console.log(err);
+                    res.send({ error: error });
+                    return next(error);
                 }
                 else {
                     res.setHeader('Content-Type', 'application/json');
                     res.send(JSON.stringify({ response: 'success', existingEmail: false }, null, 3));
                 }
-            }); //newUser.save
+            }); // newUser.save
         }
         else {
-            console.log('The user already exist, impossible to register');
+            // console.log('The user already exist, impossible to register');
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify({ response: 'fail', existingEmail: true }, null, 3));
         }
-    }); //User.find
+    }); // User.find
 };

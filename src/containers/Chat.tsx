@@ -1,10 +1,12 @@
-import * as React from "react";
-import { connect } from "react-redux";
+import * as React from 'react';
+import { connect } from 'react-redux';
 import * as socketIoClient from 'socket.io-client';
 import { Panel, Jumbotron, ListGroup, ListGroupItem, Button } from 'react-bootstrap';
-import { fetchUsers,  saveMessage, fetchMessages } from "../actions/index";
+import { FormattedMessage, injectIntl, InjectedIntlProps } from 'react-intl';
 
-interface ChatProps {
+import { fetchUsers,  saveMessage, fetchMessages } from '../actions/index';
+
+interface ChatProps extends InjectedIntlProps {
   allConversations: any;
   currentConversation: string;
   messages: any;  
@@ -22,7 +24,7 @@ interface ChatState {
 // bitbucket
 
 class Chat extends React.Component <ChatProps, ChatState> {
-  constructor(props: ChatProps) {    
+  constructor(props: ChatProps) {
     super(props);
     this.state = {
       response: '',
@@ -98,8 +100,10 @@ class Chat extends React.Component <ChatProps, ChatState> {
         return message.author == user._id;
       })
 
+      let date = this.props.intl.formatRelative(message.createdAt);
+      // debugger
       return (
-        <ListGroupItem key={message._id} header={`${author.firstName}, ${message.createdAt}`} >
+        <ListGroupItem key={message._id} header={`${author.firstName}, ${date}`} >
           {message.body}
         </ListGroupItem>
       );
@@ -134,12 +138,22 @@ class Chat extends React.Component <ChatProps, ChatState> {
             <Button
               onClick={this.handleSend}
             >
-              Send message
+              <FormattedMessage
+                id="chat.sendMessage"
+                defaultMessage="Send message"
+              />
+
+              
             </Button>
             </form>                        
         :
           <Jumbotron className="w-100 h-100">
-            <h3>Please select a conversation.</h3>           
+            <h3>
+            <FormattedMessage
+                id="chat.selectAConversation"
+                defaultMessage="Please select a conversation."
+              />
+            </h3>
           </Jumbotron>
       }
       </div>
@@ -165,4 +179,4 @@ function mapDispatchToProps(dispatch: any) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Chat);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Chat));

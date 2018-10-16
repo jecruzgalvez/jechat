@@ -1,6 +1,6 @@
-import { NEW_CONVERSATION }     from '../actions/act_conv_newConversation';
-import { FETCH_CONVERSATIONS }  from '../actions/act_conv_fetchConversations';
-import { SELECT_CONVERSATION }  from '../actions/act_conv_selectConversation';
+import { NEW_CONVERSATION }     from '../actions/actionConversations_newConversation';
+import { FETCH_CONVERSATIONS }  from '../actions/actionConversations_fetchConversations';
+import { SELECT_CONVERSATION }  from '../actions/actionConversations_selectConversation';
 
 const initialState = {
   all: [],

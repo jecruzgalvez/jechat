@@ -4,7 +4,7 @@ import axios from 'axios';
 const FETCH_CONVERSATIONS       = 'conversation/FETCH_CONVERSATIONS';
 const FETCH_CONVERSATIONS_ERROR = 'conversation/FETCH_CONVERSATIONS_ERROR';
 function API_FetchConversations() {
-  return axios.get('/api/fetchConversations')
+  return axios.get('/api/fetchConversations');
 }
 function fetchConversations_OnSuccess(success: {_id: string}[]) {
   return {
@@ -27,11 +27,11 @@ const fetchConversations = () => {
       },
       error => {
         // debugger;
-        dispatch(fetchConversations_OnError(error))
+        dispatch(fetchConversations_OnError(error));
       }
     );
   };
-}
+};
 
 export default fetchConversations;
 export {FETCH_CONVERSATIONS, FETCH_CONVERSATIONS_ERROR};

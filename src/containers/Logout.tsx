@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { logout } from '../actions/index';
 import axios from 'axios';
 import { Jumbotron } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 interface LogoutProps {
   logout: () => void;
@@ -23,7 +24,12 @@ class Logout extends React.Component <LogoutProps, {}> {
   render() {
     return (
       <Jumbotron>
-        <h3>Good bye.</h3>        
+        <h3>
+          <FormattedMessage
+            id="logout.GoodBye"
+            defaultMessage="Good bye."
+          />
+        </h3>        
       </Jumbotron>
     );
   }

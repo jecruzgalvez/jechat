@@ -7,11 +7,11 @@ import { User } from '../models/user';
  */
 export const fetchFriends = (req: express.Request , res: express.Response, next: Function) => { 
   let userId = mongoose.Types.ObjectId(req.cookies['userId']);
-  if(!userId) {
+  if (!userId) {
     res.status(500).send();
   }  
   User.findOne({_id: userId})
-  .populate('friends','firstName')
+  .populate('friends', 'firstName')
   .exec( function (err, friends) {
     if ( err ) {
       res.status(500).send();
@@ -20,4 +20,4 @@ export const fetchFriends = (req: express.Request , res: express.Response, next:
       res.send(JSON.stringify({ friends: friends['friends'] }));
     }
   });  
-}
+};

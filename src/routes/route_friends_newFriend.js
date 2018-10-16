@@ -35,7 +35,7 @@ exports.newFriend = function (req, res, next) {
         }
         else {
             // if(existingFriend !== null ) {
-            console.log('existingFriend', friends);
+            // console.log('existingFriend', friends);
             //   res.setHeader('Content-Type', 'application/json');
             //   res.send(JSON.stringify({ friends: null }));
             // }

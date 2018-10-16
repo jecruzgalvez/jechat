@@ -9,19 +9,19 @@ export const registration = (req: express.Request , res: express.Response, next:
   let firstName = req.query.firstName;
   let email = req.query.email;
   let password = req.query.password;
-  console.log('firstName', firstName);
-  console.log('email', email);
-  console.log('password', password);
+  // console.log('firstName', firstName);
+  // console.log('email', email);
+  // console.log('password', password);
 
-  if(!firstName) {
+  if (!firstName) {
     res.status(422).send({ error: 'Please choose a valid firstName.' });
     return next();
   }
-  if(!email) {
+  if (!email) {
     res.status(422).send({ error: 'Please choose a valid email.' });
     return next();
   }
-  if(!password) {
+  if (!password) {
     res.status(422).send({ error: 'Please choose a valid password.' });
     return next();
   }
@@ -40,22 +40,21 @@ export const registration = (req: express.Request , res: express.Response, next:
           password 
         });
 
-        newUser.save( (err: any, newUserInserted:any) => {
-          if (err) {
-            console.log(err);
-            res.send({ error: err });
-            return next(err);
-          }
-          else {
+        newUser.save( (error: any, newUserInserted: any) => {
+          if (error) {
+            // console.log(err);
+            res.send({ error: error });
+            return next(error);
+          } else {
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify({ response: 'success', existingEmail: false }, null, 3));
           }
-        }); //newUser.save
+        }); // newUser.save
       } else {
-        console.log('The user already exist, impossible to register');
+        // console.log('The user already exist, impossible to register');
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({ response: 'fail', existingEmail: true }, null, 3));
       }    
     }
-  ); //User.find
-}
+  ); // User.find
+};

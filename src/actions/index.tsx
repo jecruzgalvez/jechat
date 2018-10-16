@@ -1,29 +1,32 @@
-import   fetchConversations       from './act_conv_fetchConversations';
-export { fetchConversations };
-
-import   newConversation          from './act_conv_newConversation';
+import   newConversation          from './actionConversations_newConversation';
 export { newConversation };
 
-import   fetchFriends             from './act_friends_fetchFriends';
-export { fetchFriends };
+import   fetchConversations       from './actionConversations_fetchConversations';
+export { fetchConversations };
 
-import   newFriend                from './act_friends_newFriend';
-export { newFriend };
-
-import   fetchUsers               from './act_users_fetchUsers';
-export { fetchUsers };
-
-import   saveMessage              from './act_mess_saveMessage';
-export { saveMessage };
-
-import   fetchMessages            from './act_mess_fetchMessages';
-export { fetchMessages };
-
-import   selectConversation       from './act_conv_selectConversation';
+import   selectConversation       from './actionConversations_selectConversation';
 export { selectConversation };
 
-import   logout                   from './act_logout';
+import   fetchUsers               from './actionUsers_fetchUsers';
+export { fetchUsers };
+
+import   newFriend                from './actionFriends_newFriend';
+export { newFriend };
+
+import   fetchFriends             from './actionFriends_fetchFriends';
+export { fetchFriends };
+
+import   saveMessage              from './actionMessages_saveMessage';
+export { saveMessage };
+
+import   fetchMessages            from './actionMessages_fetchMessages';
+export { fetchMessages };
+
+import   logout                   from './action_logout';
 export { logout };
+
+import   selectLanguage           from './actionSettings_selectLanguage';
+export { selectLanguage };
 
 
 //////////////////////////////  setVisibilityFilter //////////////////////////////

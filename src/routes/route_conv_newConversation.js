@@ -21,7 +21,7 @@ exports.newConversation = function (req, res, next) {
     });
     conversation.save(function (err, newConversation) {
         if (err) {
-            console.log(err);
+            // console.log(err);
             res.send({ error: err });
             return next(err);
         }
@@ -44,7 +44,7 @@ exports.newConversation = function (req, res, next) {
                             user_1.User.find({ '_id': part }, { firstName: 1 })
                                 .sort('-firstName')
                                 .populate({
-                                path: "author"
+                                path: 'author'
                             })
                                 .exec(function (err, participant) {
                                 if (err) {

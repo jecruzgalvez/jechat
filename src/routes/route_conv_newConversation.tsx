@@ -9,11 +9,11 @@ export const newConversation = (req: express.Request , res: express.Response, ne
   let userId = req.cookies['userId'];
   let recipient = req.query.recipient;
 
-  if(!userId) {
+  if (!userId) {
     res.status(422).send({ error: 'Please choose a valid userId for your conversation.' });
     return next();
   }
-  if(!recipient) {
+  if (!recipient) {
     res.status(422).send({ error: 'Please choose a valid recipient for your conversation.' });
     return next();
   }   
@@ -24,7 +24,7 @@ export const newConversation = (req: express.Request , res: express.Response, ne
 
   conversation.save(function(err, newConversation) {
     if (err) {
-      console.log(err);
+      // console.log(err);
       res.send({ error: err });
       return next(err);
     }
@@ -37,29 +37,28 @@ export const newConversation = (req: express.Request , res: express.Response, ne
       if (err) {
         res.send({ error: err });
         return next(err);
-      }
-      else {     
+      } else {     
         // console.log('conversations',conversations);
-        interface convsI {
-            participants: string[],
-            _id: ''
+        interface Iconvs {
+            participants: string[];
+            _id: '';
         }
-        let conversationsWithNames: convsI[] = [];
+        let conversationsWithNames: Iconvs[] = [];
 
         conversations.map((conversation) => {
 
-          let conv : convsI = {
+          let conv: Iconvs = {
             participants: [],
           _id: conversation._id
-          }        
+          };
 
           conversation['participants'].map( (part: any) => {          
 
-            if(part != userId){
+            if (part != userId) {
               User.find({ '_id': part }, {firstName: 1})
                 .sort('-firstName')
                 .populate({
-                  path: "author"
+                  path: 'author'
                 })             
               .exec(function(err, participant) {
                 if (err) {
@@ -68,10 +67,10 @@ export const newConversation = (req: express.Request , res: express.Response, ne
                 }
                 conv.participants.push(participant[0]['firstName']);
 
-                if( conv.participants.length === conversation['participants'].length -1) {
+                if ( conv.participants.length === conversation['participants'].length -1) {
                   conversationsWithNames.push(conv);
 
-                  if(conversationsWithNames.length === conversations.length) {
+                  if (conversationsWithNames.length === conversations.length) {
                     // console.log(conversationsWithNames);
                     res.setHeader('Content-Type', 'application/json');
                     res.send(JSON.stringify({ conversations: conversationsWithNames }));
@@ -84,4 +83,4 @@ export const newConversation = (req: express.Request , res: express.Response, ne
       }
     });
   });
-}
+};

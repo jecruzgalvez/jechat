@@ -6,7 +6,11 @@ import Chat from '../containers/Chat';
 import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 import { Grid, Row, Col } from 'react-bootstrap';
 
+import {InjectedIntl} from 'react-intl';
+
+
 class Dashboard extends React.Component {
+  intl: InjectedIntl;    
   render() {
     return (
       
@@ -16,10 +20,9 @@ class Dashboard extends React.Component {
             <Sidebar />
           </Col>
           <Col md={7}>
-            <Chat />
+            <Chat intl={this.intl} />
           </Col>
         </Row>
-
       </Grid>
       
     );

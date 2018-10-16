@@ -6,6 +6,7 @@ exports.__esModule = true;
 exports.logout = function (req, res, next) {
     res.clearCookie('auth');
     res.clearCookie('userId');
+    res.clearCookie('userName');
     res.end('Logout!');
     // res.redirect('/')
     next();
